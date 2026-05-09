@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academia Monte Santo</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --g1:#2d5a27;--g2:#4a8c3f;--g3:#6ab05e;--g4:#9dd494;--g5:#c8edc2;--g6:#eaf7e7;
+  --cream:#f8f6f0;--cream2:#ede9e0;--text:#1a2518;--muted:#6b7c65;
+  --white:#fff;--danger:#8b1a1a;--dbg:#fceaea;--ok:#1a6b4a;--okbg:#e8f5ee;
+  --border:rgba(74,140,63,.15);--shadow:0 4px 24px rgba(45,90,39,.12);
+  --shadowlg:0 10px 48px rgba(45,90,39,.18);--r:14px;--rs:9px;--sidebar:265px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
+.screen{display:none;min-height:100vh}.screen.active{display:flex;flex-direction:column}
+#screen-login{background:linear-gradient(155deg,#eaf5e7 0%,#d4ecce 40%,#bde0b5 100%);align-items:center;justify-content:center;position:relative;overflow:hidden}
+.deco-tl{position:absolute;top:0;left:0;width:0;height:0;border-style:solid;border-width:180px 180px 0 0;border-color:rgba(74,140,63,.25) transparent transparent transparent}
+.deco-br{position:absolute;bottom:0;right:0;width:0;height:0;border-style:solid;border-width:0 0 150px 150px;border-color:transparent transparent rgba(74,140,63,.2) transparent}
+.deco-orb{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(106,176,94,.15) 0%,transparent 70%);right:-100px;top:50%;transform:translateY(-50%)}
+.login-box{background:rgba(255,255,255,.96);border:1.5px solid rgba(106,176,94,.3);border-radius:22px;padding:36px 40px 40px;width:100%;max-width:430px;position:relative;z-index:1;backdrop-filter:blur(14px);box-shadow:var(--shadowlg)}
+.logo-svg-wrap{display:flex;justify-content:center;margin-bottom:6px}
+.logo-svg-wrap svg{width:120px;height:auto}
+.login-name{font-size:20px;font-weight:900;color:var(--g1);text-align:center;letter-spacing:1.5px;margin-bottom:3px}
+.login-slogan{font-family:'Caveat',cursive;font-size:15px;color:var(--g2);text-align:center;margin-bottom:24px;line-height:1.4}
+.fg{margin-bottom:13px}
+.fg label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;font-weight:800;color:var(--muted);margin-bottom:5px}
+.fg input{width:100%;padding:11px 14px;background:var(--cream);border:1.5px solid var(--border);border-radius:var(--rs);color:var(--text);font-size:14px;font-family:'Nunito',sans-serif;outline:none;transition:border-color .2s}
+.fg input:focus{border-color:var(--g3);background:#fff}
+.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,var(--g1) 0%,var(--g3) 100%);color:#fff;border:none;border-radius:var(--rs);font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;letter-spacing:.3px;margin-top:6px;box-shadow:0 4px 14px rgba(45,90,39,.3);transition:opacity .2s}
+.btn-login:hover{opacity:.9}
+.login-err{background:var(--dbg);border:1px solid rgba(139,26,26,.2);border-radius:var(--rs);padding:9px 12px;font-size:12px;color:var(--danger);margin-bottom:12px;display:none}
+.admin-link{text-align:center;margin-top:16px;font-size:12px;color:var(--muted)}
+.admin-link a{color:var(--g1);cursor:pointer;font-weight:800}
+.topnav{background:var(--g1);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:58px;flex-shrink:0;box-shadow:0 2px 14px rgba(45,90,39,.3);position:sticky;top:0;z-index:100}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-icon{width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#fff}
+.nav-title{font-size:15px;font-weight:900;color:#fff;letter-spacing:.8px}
+.nav-sub{font-size:10px;color:rgba(255,255,255,.5);font-family:'Caveat',cursive}
+.nav-right{display:flex;align-items:center;gap:8px}
+.nav-av{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:1.5px solid rgba(255,255,255,.3)}
+.nav-name{font-size:12px;color:rgba(255,255,255,.65)}
+.btn-nav{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.75);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s}
+.btn-nav:hover{background:rgba(255,255,255,.22);color:#fff}
+.menu-btn{display:none;background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:4px}
+.app-layout{display:flex;flex:1;overflow:hidden;min-height:0}
+.sidebar{width:var(--sidebar);background:var(--g1);flex-shrink:0;display:flex;flex-direction:column;overflow-y:auto}
+.sidebar-user{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.1);text-align:center}
+.sb-av{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(255,255,255,.25),rgba(255,255,255,.1));color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;margin:0 auto 8px;border:2px solid rgba(255,255,255,.25)}
+.sb-name{font-size:13px;font-weight:800;color:#fff;margin-bottom:2px}
+.sb-role{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.8px}
+.sb-progress{margin-top:10px;background:rgba(255,255,255,.1);border-radius:20px;height:5px}
+.sb-progress-bar{height:5px;border-radius:20px;background:var(--g4);transition:width .5s}
+.sb-progress-txt{font-size:10px;color:rgba(255,255,255,.4);margin-top:4px}
+.sidebar-nav{flex:1;padding:10px 0}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;transition:all .15s;color:rgba(255,255,255,.6);font-size:13px;font-weight:700;border-left:3px solid transparent}
+.sb-item:hover{background:rgba(255,255,255,.08);color:#fff}
+.sb-item.active{background:rgba(255,255,255,.12);color:#fff;border-left-color:var(--g4)}
+.sb-icon{font-size:16px;flex-shrink:0;width:22px;text-align:center}
+.sb-section{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.3);padding:14px 16px 6px;font-weight:800}
+.sidebar-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,.1)}
+.sb-logout{width:100%;padding:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.6);border-radius:var(--rs);font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s}
+.sb-logout:hover{background:rgba(255,255,255,.15);color:#fff}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
+.main-content{flex:1;overflow-y:auto;min-width:0}
+.page{padding:24px 20px;max-width:880px;width:100%;margin:0 auto}
+.panel-view{display:none}.panel-view.active{display:block}
+.dash-hero{background:linear-gradient(135deg,var(--g1) 0%,var(--g2) 60%,var(--g3) 100%);border-radius:var(--r);padding:22px 24px;margin-bottom:20px;display:flex;align-items:center;gap:18px;box-shadow:0 4px 18px rgba(45,90,39,.25);position:relative;overflow:hidden}
+.dash-hero::after{content:'';position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06)}
+.dash-hero h2{font-size:20px;font-weight:800;color:#fff;margin-bottom:3px}
+.dash-hero p{font-size:13px;color:rgba(255,255,255,.6)}
+.ring{position:relative;width:64px;height:64px;flex-shrink:0}
+.ring svg{transform:rotate(-90deg)}
+.ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff}
+.level-block{margin-bottom:22px}
+.level-header{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:var(--r);margin-bottom:10px;position:relative;overflow:hidden}
+.level-header.lv1{background:linear-gradient(135deg,#1b5e20,#2e7d32)}
+.level-header.lv2{background:linear-gradient(135deg,#1a237e,#283593)}
+.level-header.lv3{background:linear-gradient(135deg,#4a148c,#6a1b9a)}
+.level-header.locked-lv{background:#9e9e9e;opacity:.65}
+.level-badge{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;flex-shrink:0}
+.level-info{flex:1}
+.level-info h3{font-size:16px;font-weight:900;color:#fff;margin-bottom:2px}
+.level-info p{font-size:12px;color:rgba(255,255,255,.6)}
+.level-lock-msg{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px}
+.level-progress{text-align:right;color:rgba(255,255,255,.8);font-size:13px;font-weight:700}
+.sec-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-weight:800;margin-bottom:10px}
+.mod-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:14px;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:all .2s}
+.mod-card:hover:not(.locked){box-shadow:var(--shadow);transform:translateY(-1px);border-color:var(--g4)}
+.mod-card.locked{opacity:.5;cursor:not-allowed}
+.mod-card.done{border-left:3px solid var(--g1)}
+.mod-num{width:40px;height:40px;border-radius:var(--rs);background:var(--g6);color:var(--g1);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;flex-shrink:0}
+.mod-num.lv2-num{background:#e8eaf6;color:#283593}
+.mod-num.lv3-num{background:#f3e5f5;color:#6a1b9a}
+.mod-info{flex:1}
+.mod-info h3{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px}
+.mod-info p{font-size:12px;color:var(--muted)}
+.badge{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:700;flex-shrink:0}
+.b-avail{background:var(--g6);color:var(--g1)}.b-done{background:var(--okbg);color:var(--ok)}.b-lock{background:#f3f4f6;color:#9ca3af}
+.mod-hero{border-radius:var(--r);padding:22px 24px;margin-bottom:16px;box-shadow:0 4px 18px rgba(0,0,0,.15);position:relative;overflow:hidden}
+.mod-hero.lv1{background:linear-gradient(135deg,#1b5e20,#388e3c)}
+.mod-hero.lv2{background:linear-gradient(135deg,#1a237e,#3949ab)}
+.mod-hero.lv3{background:linear-gradient(135deg,#4a148c,#7b1fa2)}
+.mod-hero::after{content:'';position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.07)}
+.mod-hero-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.5);margin-bottom:6px;font-weight:700}
+.mod-hero h2{font-size:20px;font-weight:800;color:#fff;margin-bottom:4px}
+.mod-hero p{font-size:13px;color:rgba(255,255,255,.55)}
+.tip{background:var(--g6);border:1px solid var(--g5);border-radius:var(--rs);padding:10px 14px;font-size:12px;color:var(--g1);margin-bottom:14px;font-weight:600}
+.lesson-block{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.lesson-hdr{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background .15s;gap:12px}
+.lesson-hdr:hover{background:var(--g6)}
+.l-num{width:28px;height:28px;border-radius:50%;background:var(--g5);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--g1);flex-shrink:0}
+.l-ht{flex:1}.l-title{font-size:14px;font-weight:700;color:var(--text)}.l-meta{font-size:11px;color:var(--muted);margin-top:1px}
+.l-chev{font-size:10px;color:var(--muted);transition:transform .25s;flex-shrink:0}.l-chev.open{transform:rotate(90deg)}
+.lesson-body{padding:0 16px 16px;border-top:1px solid var(--border);display:none}
+.lesson-body p{font-size:14px;line-height:1.75;color:#374151;margin-top:12px}
+.verse-box{background:var(--g6);border-left:3px solid var(--g3);border-radius:0 var(--rs) var(--rs) 0;padding:12px 16px;margin:12px 0;font-size:13px;font-style:italic;color:var(--text);line-height:1.65}
+.verse-ref{font-size:11px;color:var(--muted);font-style:normal;display:block;margin-top:5px;font-weight:700}
+.file-res{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--rs);margin-top:8px;background:var(--cream);cursor:pointer;transition:all .2s}
+.file-res:hover{border-color:var(--g3);background:var(--g6)}
+.f-icon{width:38px;height:38px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.fi-pdf{background:#fce8e8}.fi-doc{background:#e8f0fe}.fi-ppt{background:#feeee8}.fi-vid{background:#e8f5e9}.fi-aud{background:#f3e8fe}.fi-other{background:var(--g6)}
+.f-info{flex:1}.f-name{font-size:13px;font-weight:700;color:var(--text)}.f-size{font-size:11px;color:var(--muted);margin-top:1px}.f-act{font-size:11px;color:var(--g1);font-weight:700}
+.media-wrap{margin-top:10px;border-radius:var(--rs);overflow:hidden}
+.media-wrap video,.media-wrap audio{width:100%;display:block}
+.submission-box{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:18px;margin-top:14px}
+.submission-box h4{font-size:13px;font-weight:800;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.sub-upload-zone{border:2px dashed var(--g5);border-radius:var(--rs);padding:16px;text-align:center;cursor:pointer;transition:all .2s;background:var(--cream);margin-bottom:10px}
+.sub-upload-zone:hover{border-color:var(--g3);background:var(--g6)}
+.sub-upload-zone input{display:none}
+.sub-file-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--border);border-radius:var(--rs);margin-bottom:5px;background:var(--cream);font-size:12px}
+.sub-file-item .sfn{flex:1;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sub-status{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;margin-top:6px}
+.sub-done{background:var(--okbg);color:var(--ok)}
+.exam-bar-bg{background:var(--cream2);border-radius:20px;height:5px;margin-bottom:18px}
+.exam-bar{height:5px;border-radius:20px;background:var(--g3);transition:width .3s}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.q-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;margin-bottom:7px}
+.q-txt{font-size:15px;font-weight:800;color:var(--text);line-height:1.5;margin-bottom:14px}
+.opt{display:flex;align-items:center;gap:10px;padding:10px 13px;border:1.5px solid var(--border);border-radius:var(--rs);cursor:pointer;margin-bottom:6px;font-size:13px;font-weight:600;color:var(--text);transition:all .15s}
+.opt:hover{border-color:var(--g4);background:var(--g6)}
+.opt.sel{border-color:var(--g1);background:var(--g6);color:var(--g1)}
+.opt.ok{border-color:var(--ok);background:var(--okbg);color:var(--ok)}
+.opt.err{border-color:var(--danger);background:var(--dbg);color:var(--danger)}
+.opt-dot{width:20px;height:20px;border-radius:50%;border:2px solid currentColor;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px}
+.res-hero{background:linear-gradient(135deg,var(--g1),var(--g3));border-radius:var(--r);padding:30px 24px;text-align:center;margin-bottom:16px;box-shadow:var(--shadow)}
+.res-emoji{font-size:44px;margin-bottom:10px}.res-title{font-size:20px;font-weight:800;color:#fff;margin-bottom:6px}
+.res-score{font-size:56px;font-weight:900;margin:6px 0}.s-pass{color:#b9f6ca}.s-fail{color:#ff8a80}
+.res-sub{font-size:13px;color:rgba(255,255,255,.5)}
+.res-chip{display:inline-block;margin-top:12px;padding:6px 20px;border-radius:20px;font-size:13px;font-weight:800}
+.c-pass{background:rgba(185,246,202,.2);color:#b9f6ca;border:1px solid rgba(185,246,202,.3)}
+.c-fail{background:rgba(255,138,128,.2);color:#ff8a80;border:1px solid rgba(255,138,128,.3)}
+.btn-p{width:100%;padding:13px;background:linear-gradient(135deg,var(--g1),var(--g3));color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;letter-spacing:.3px;margin-bottom:8px;box-shadow:0 3px 12px rgba(45,90,39,.25);transition:opacity .2s}
+.btn-p:hover{opacity:.9}.btn-p.done-btn{background:linear-gradient(135deg,#1b5e20,#2e7d32)}
+.btn-g{width:100%;padding:12px;background:transparent;color:var(--muted);border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;transition:all .2s}
+.btn-g:hover{border-color:var(--g4);color:var(--g1)}
+.about-hero{background:linear-gradient(135deg,var(--g1),var(--g3));border-radius:var(--r);padding:28px 24px;margin-bottom:20px;text-align:center;position:relative;overflow:hidden}
+.about-hero::after{content:'';position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.07)}
+.about-hero svg{width:70px;height:auto;margin-bottom:10px}
+.about-hero h2{font-size:22px;font-weight:900;color:#fff;letter-spacing:1px;margin-bottom:4px}
+.about-hero p{font-size:16px;color:rgba(255,255,255,.6);font-family:'Caveat',cursive}
+.mv-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:22px 24px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.mv-icon{width:40px;height:40px;border-radius:var(--rs);background:var(--g6);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:10px}
+.mv-card h3{font-size:15px;font-weight:800;color:var(--g1);margin-bottom:10px}
+.mv-card p{font-size:14px;color:#374151;line-height:1.75}
+.verse-banner{background:var(--g6);border:1.5px solid var(--g5);border-radius:var(--r);padding:20px 24px;margin-bottom:16px}
+.verse-banner blockquote{font-style:italic;font-size:14px;color:var(--text);line-height:1.8;margin-bottom:8px}
+.verse-banner cite{font-size:12px;color:var(--muted);font-weight:700;font-style:normal}
+#screen-admin .page{max-width:980px}
+.a-tabs{display:flex;gap:4px;background:var(--cream2);padding:4px;border-radius:var(--r);margin-bottom:22px;flex-wrap:wrap}
+.a-tab{flex:1;min-width:70px;padding:9px 8px;text-align:center;font-size:11px;font-weight:800;border-radius:var(--rs);cursor:pointer;transition:all .15s;color:var(--muted)}
+.a-tab.active{background:var(--g1);color:#fff}
+.a-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.a-card h3{font-size:14px;font-weight:800;margin-bottom:14px;color:var(--text)}
+.fr{margin-bottom:12px}
+.fr label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:800;color:var(--muted);margin-bottom:5px}
+.fr input,.fr textarea,.fr select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:13px;font-family:'Nunito',sans-serif;color:var(--text);background:var(--cream);outline:none;transition:border-color .15s;resize:vertical}
+.fr input:focus,.fr textarea:focus,.fr select:focus{border-color:var(--g3);background:#fff}
+.btn-s{padding:9px 20px;background:var(--g1);color:#fff;border:none;border-radius:var(--rs);font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;transition:background .2s}
+.btn-s:hover{background:var(--g2)}
+.btn-d{padding:6px 13px;background:transparent;color:var(--danger);border:1px solid rgba(139,26,26,.25);border-radius:var(--rs);font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer}
+.btn-d:hover{background:var(--dbg)}
+.btn-sm{padding:5px 12px;background:transparent;color:var(--g1);border:1.5px solid var(--border);border-radius:var(--rs);font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer}
+.btn-sm:hover{background:var(--g6);border-color:var(--g4)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.a-item{padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--rs);margin-bottom:8px;display:flex;align-items:center;gap:12px;background:var(--cream)}
+.i-lbl{font-size:13px;font-weight:700;color:var(--text)}.i-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:18px}
+.stat{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:14px;text-align:center}
+.s-num{font-size:26px;font-weight:900;color:var(--g1)}.s-lbl{font-size:10px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.8px;font-weight:700}
+.editor-wrap{display:none}.editor-wrap.open{display:block}
+.upload-zone{border:2px dashed var(--g5);border-radius:var(--rs);padding:18px;text-align:center;cursor:pointer;transition:all .2s;background:var(--cream);margin-top:6px}
+.upload-zone:hover{border-color:var(--g3);background:var(--g6)}
+.upload-zone input{display:none}
+.u-icon{font-size:26px;margin-bottom:5px}.upload-zone p{font-size:12px;color:var(--muted);font-weight:600}.upload-zone span{font-size:11px;color:var(--muted)}
+.ufile{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid var(--border);border-radius:var(--rs);margin-bottom:6px;background:#fff}
+.ufile .fn{flex:1;font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ufile .fs{font-size:11px;color:var(--muted)}
+.up-bar-wrap{height:4px;border-radius:20px;background:var(--cream2);margin-top:6px;display:none}
+.up-bar{height:4px;border-radius:20px;background:var(--g3);width:0%;transition:width .3s}
+.u-card{padding:12px 16px;border:1.5px solid var(--border);border-radius:var(--rs);margin-bottom:8px;display:flex;align-items:center;gap:12px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.u-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--g1),var(--g3));color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
+.u-info{flex:1}.u-name{font-size:13px;font-weight:700;color:var(--text)}.u-meta{font-size:11px;color:var(--muted);margin-top:1px}
+.u-acts{display:flex;gap:6px;flex-shrink:0}
+.ai-box{background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1.5px solid #c4b5fd;border-radius:var(--r);padding:16px;margin-bottom:14px}
+.ai-box h4{font-size:13px;font-weight:800;color:#5b21b6;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.btn-ai{padding:9px 18px;background:linear-gradient(135deg,#5b21b6,#7c3aed);color:#fff;border:none;border-radius:var(--rs);font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;transition:opacity .2s;display:flex;align-items:center;gap:6px}
+.btn-ai:hover{opacity:.88}.btn-ai:disabled{opacity:.5;cursor:not-allowed}
+.ai-spinner{display:none;align-items:center;gap:8px;font-size:12px;color:#7c3aed;font-weight:700;margin-top:10px}
+.ai-spinner.show{display:flex}
+.ai-spin{width:16px;height:16px;border:2px solid #c4b5fd;border-top-color:#7c3aed;border-radius:50%;animation:spin .7s linear infinite}
+.sub-admin-item{padding:14px 16px;border:1.5px solid var(--border);border-radius:var(--rs);margin-bottom:8px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.sa-name{font-size:13px;font-weight:700;color:var(--text);flex:1}.sa-mod{font-size:11px;color:var(--muted)}
+.sa-file-link{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:var(--g6);color:var(--g1);border-radius:20px;font-size:11px;font-weight:700;text-decoration:none;transition:background .15s;margin:2px}
+.sa-file-link:hover{background:var(--g5)}
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center}
+.modal-ov.open{display:flex}
+.modal-box{background:#fff;border-radius:var(--r);padding:28px;width:100%;max-width:420px;margin:16px;box-shadow:var(--shadowlg);max-height:90vh;overflow-y:auto}
+.modal-box h3{font-size:16px;font-weight:800;margin-bottom:16px;color:var(--text)}
+.pill{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700;display:inline-block}
+.pill-g{background:var(--g6);color:var(--g1)}.pill-b{background:#e8f0fe;color:#1565c0}
+.loading-ov{position:fixed;inset:0;background:rgba(234,247,231,.97);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:500;transition:opacity .5s}
+.loading-ov.hidden{opacity:0;pointer-events:none}
+.spin{width:48px;height:48px;border:4px solid var(--g5);border-top-color:var(--g1);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-txt{font-family:'Caveat',cursive;font-size:22px;color:var(--g1)}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--g1);color:#fff;padding:11px 18px;border-radius:var(--r);font-size:13px;font-weight:700;opacity:0;transform:translateY(8px);transition:all .3s;z-index:1000;pointer-events:none;box-shadow:var(--shadow)}
+.toast.show{opacity:1;transform:translateY(0)}
+.rt-dot{width:7px;height:7px;border-radius:50%;background:#4caf50;display:inline-block;margin-right:5px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.empty-state{text-align:center;padding:40px;color:var(--muted)}.empty-state .e-icon{font-size:38px;margin-bottom:10px}.empty-state p{font-size:14px}
+@media(max-width:768px){
+  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:100;transform:translateX(calc(-1 * var(--sidebar)));transition:transform .3s}
+  .sidebar.open{transform:translateX(0)}.sidebar-overlay.open{display:block}.menu-btn{display:block}
+  .nav-name{display:none}.page{padding:14px}.g2{grid-template-columns:1fr}
+  .a-tab{font-size:10px;padding:7px 4px}.u-acts{flex-direction:column}
+}
+@media(max-width:480px){.login-box{margin:12px;padding:28px 18px}}
+</style>
+</head>
+<body>
+<div class="loading-ov" id="loading-ov"><div class="spin"></div><div class="load-txt">Cargando Academia Monte Santo...</div></div>
+
+<div id="screen-login" class="screen active">
+  <div class="deco-tl"></div><div class="deco-br"></div><div class="deco-orb"></div>
+  <div class="login-box">
+    <div class="logo-svg-wrap">
+      <svg viewBox="0 0 220 165" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(12,8)" opacity="0.45">
+          <path d="M 42,148 Q 46,75 80,42 Q 100,20 116,60 Q 132,20 152,42 Q 186,75 190,148" fill="none" stroke="#9dd494" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <path d="M 38,148 Q 43,72 78,38 Q 100,14 116,55 Q 132,14 154,38 Q 188,72 192,148" fill="none" stroke="#4a8c3f" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="login-name">Academia Monte Santo</div>
+    <div class="login-slogan">El refugio de Su Santidad en lo alto.</div>
+    <div class="login-err" id="login-err">Usuario o contrase&ntilde;a incorrectos.</div>
+    <div class="fg"><label>Usuario</label><input type="text" id="li-user" placeholder="Ingresa tu usuario" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <div class="fg"><label>Contrase&ntilde;a</label><input type="password" id="li-pass" placeholder="Tu contrase&ntilde;a" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <button class="btn-login" id="login-btn" onclick="doLogin()">Entrar a estudiar &rarr;</button>
+    <div class="admin-link">&iquest;Eres del equipo? <a onclick="openModal('modal-admin')">Acceso administrador</a></div>
+  </div>
+</div>
+
+<div class="modal-ov" id="modal-admin">
+  <div class="modal-box"><h3>&#128272; Acceso Administrador</h3>
+    <div class="fr"><label>Contrase&ntilde;a</label><input type="password" id="adm-pass" placeholder="Contrase&ntilde;a de admin" onkeydown="if(event.key==='Enter')doAdminLogin()"/></div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn-s" onclick="doAdminLogin()">Ingresar</button>
+      <button class="btn-g" style="width:auto;padding:9px 18px;font-size:13px" onclick="closeModal('modal-admin')">Cancelar</button>
+    </div>
+  </div>
+</div>
+<div class="modal-ov" id="modal-reset">
+  <div class="modal-box"><h3>&#128273; Cambiar contrase&ntilde;a</h3>
+    <p id="reset-lbl" style="font-size:13px;color:var(--muted);margin-bottom:14px"></p>
+    <div class="fr"><label>Nueva contrase&ntilde;a</label><input type="password" id="reset-pass"/></div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn-s" onclick="saveReset()">Guardar</button>
+      <button class="btn-g" style="width:auto;padding:9px 18px;font-size:13px" onclick="closeModal('modal-reset')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="screen-app" class="screen">
+  <nav class="topnav">
+    <div class="nav-brand">
+      <button class="menu-btn" onclick="toggleSidebar()">&#9776;</button>
+      <div class="nav-icon">M</div>
+      <div><div class="nav-title">Academia Monte Santo</div><div class="nav-sub"><span class="rt-dot"></span>En vivo</div></div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-av" id="app-av">?</div>
+      <span class="nav-name" id="app-nn"></span>
+      <button class="btn-nav" onclick="doLogout()">Salir</button>
+    </div>
+  </nav>
+  <div class="app-layout">
+    <div class="sidebar-overlay" id="sb-overlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-user">
+        <div class="sb-av" id="sb-av">?</div>
+        <div class="sb-name" id="sb-name">Estudiante</div>
+        <div class="sb-role">Estudiante</div>
+        <div class="sb-progress"><div class="sb-progress-bar" id="sb-prog-bar" style="width:0%"></div></div>
+        <div class="sb-progress-txt" id="sb-prog-txt">0% completado</div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sb-section">Estudio</div>
+        <div class="sb-item active" id="sb-modulos" onclick="showPanel('modulos')"><span class="sb-icon">&#128218;</span><span>Mis m&oacute;dulos</span></div>
+        <div class="sb-item" id="sb-entregas" onclick="showPanel('entregas')"><span class="sb-icon">&#128228;</span><span>Mis entregas</span></div>
+        <div class="sb-item" id="sb-certificados" onclick="showPanel('certificados')"><span class="sb-icon">&#127891;</span><span>Mis certificados</span></div>
+        <div class="sb-section">Informaci&oacute;n</div>
+        <div class="sb-item" id="sb-about" onclick="showPanel('about')"><span class="sb-icon">&#9962;</span><span>Acerca de Monte Santo</span></div>
+        <div class="sb-item" id="sb-ayuda" onclick="showPanel('ayuda')"><span class="sb-icon">&#10067;</span><span>Ayuda</span></div>
+      </nav>
+      <div class="sidebar-footer"><button class="sb-logout" onclick="doLogout()">Cerrar sesi&oacute;n</button></div>
+    </aside>
+    <div class="main-content"><div class="page">
+
+      <div class="panel-view active" id="panel-modulos">
+        <div class="dash-hero">
+          <div style="flex:1"><h2 id="dash-greet">&#161;Bienvenido!</h2><p id="dash-sub"><span class="rt-dot"></span>Sincronizado en tiempo real</p></div>
+          <div class="ring">
+            <svg width="64" height="64" viewBox="0 0 64 64">
+              <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="5"/>
+              <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="5" stroke-dasharray="163.36" id="ring-arc" stroke-dashoffset="163.36" stroke-linecap="round"/>
+            </svg>
+            <div class="ring-pct" id="ring-pct">0%</div>
+          </div>
+        </div>
+        <div id="levels-container"></div>
+        <div id="no-mods" style="display:none" class="empty-state"><div class="e-icon">&#128214;</div><p>El equipo publicar&aacute; los m&oacute;dulos pronto.</p></div>
+      </div>
+
+      <div class="panel-view" id="panel-entregas">
+        <div style="margin-bottom:20px"><h2 style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px">&#128228; Mis entregas</h2><p style="font-size:13px;color:var(--muted)">Archivos que has entregado en cada m&oacute;dulo</p></div>
+        <div id="my-submissions-list"></div>
+      </div>
+
+      <div class="panel-view" id="panel-certificados">
+        <div style="margin-bottom:20px"><h2 style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px">&#127891; Mis certificados</h2><p style="font-size:13px;color:var(--muted)">Niveles que has completado exitosamente</p></div>
+        <div id="certs-list"></div>
+      </div>
+
+      <div class="panel-view" id="panel-about">
+        <div class="about-hero">
+          <svg viewBox="0 0 220 165" xmlns="http://www.w3.org/2000/svg"><g transform="translate(12,8)" opacity="0.4"><path d="M 42,148 Q 46,75 80,42 Q 100,20 116,60 Q 132,20 152,42 Q 186,75 190,148" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></g><path d="M 38,148 Q 43,72 78,38 Q 100,14 116,55 Q 132,14 154,38 Q 188,72 192,148" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h2>Monte Santo</h2><p>Iglesia Cristiana Integral</p>
+        </div>
+        <div class="verse-banner">
+          <blockquote>"Toda la Escritura es inspirada por Dios, y &uacute;til para ense&ntilde;ar, para redarg&uuml;ir, para corregir, para instruir en justicia, a fin de que el hombre de Dios sea perfecto, enteramente preparado para toda buena obra."</blockquote>
+          <cite>&#8212; 2 Timoteo 3:16-17</cite>
+        </div>
+        <div class="mv-card"><div class="mv-icon">&#127775;</div><h3>Visi&oacute;n</h3><p>La Iglesia Cristiana Integral Monte Santo ser&aacute; una instituci&oacute;n l&iacute;der en el conocimiento y cumplimiento de la palabra de Dios; ejemplo a nivel nacional e internacional en la aplicaci&oacute;n de estrategias integrales para la evangelizaci&oacute;n. Destacada por la armon&iacute;a de sus l&iacute;deres y la capacidad de servir generando el verdadero acercamiento a Dios.</p></div>
+        <div class="mv-card"><div class="mv-icon">&#128591;</div><h3>Misi&oacute;n</h3><p>Generar espacios que permitan el conocimiento a Dios; ense&ntilde;ando a trav&eacute;s del ejemplo y la evangelizaci&oacute;n, en todas sus formas, que el ejercicio de la palabra de Dios es la &uacute;nica herramienta para crecer espiritualmente, mejorar la calidad de vida y adquirir as&iacute; el car&aacute;cter de Cristo.</p></div>
+        <div class="mv-card" style="background:var(--g6);border-color:var(--g5)"><div class="mv-icon" style="background:#fff">&#127963;&#65039;</div><h3>Academia Monte Santo</h3><p style="font-family:'Caveat',cursive;font-size:16px;color:var(--g1);line-height:1.7">Somos el espacio formativo donde cada creyente profundiza en la Palabra, crece en car&aacute;cter y es equipado para cumplir el prop&oacute;sito de Dios en su vida.</p></div>
+      </div>
+
+      <div class="panel-view" id="panel-ayuda">
+        <div style="margin-bottom:20px"><h2 style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px">&#10067; Ayuda</h2></div>
+        <div class="mv-card"><div class="mv-icon">&#128218;</div><h3>&iquest;C&oacute;mo funciona la Academia?</h3><p>La Academia est&aacute; organizada en <strong>3 niveles</strong>. Debes completar todos los m&oacute;dulos de un nivel para desbloquear el siguiente. Cada m&oacute;dulo tiene lecciones y un examen final que debes aprobar con <strong>70% o m&aacute;s</strong>.</p></div>
+        <div class="mv-card"><div class="mv-icon">&#128228;</div><h3>Entregas</h3><p>Algunos m&oacute;dulos requieren entregar una actividad. La encontrar&aacute;s al final del m&oacute;dulo antes del examen. Puedes subir PDF, im&aacute;genes, Word u otros archivos.</p></div>
+        <div class="mv-card"><div class="mv-icon">&#127891;</div><h3>Certificados</h3><p>Al completar todos los m&oacute;dulos de un nivel recibir&aacute;s un certificado digital en la secci&oacute;n "Mis certificados".</p></div>
+      </div>
+
+      <div class="panel-view" id="panel-module">
+        <button class="btn-g" style="width:auto;padding:8px 18px;font-size:13px;margin-bottom:16px" onclick="showPanel('modulos')">&larr; Volver a m&oacute;dulos</button>
+        <div class="mod-hero lv1" id="mod-hero-el">
+          <div class="mod-hero-lbl" id="mod-lbl">M&oacute;dulo</div>
+          <h2 id="mod-title">T&iacute;tulo</h2>
+          <p id="mod-desc">Descripci&oacute;n</p>
+        </div>
+        <div class="tip">&#128204; Puedes regresar a estudiar este m&oacute;dulo todas las veces que quieras.</div>
+        <div id="lessons-cont"></div>
+        <div id="submission-section" class="submission-box" style="display:none">
+          <h4>&#128228; Entrega de actividad</h4>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:10px">Sube tu trabajo o actividad asignada para este m&oacute;dulo.</p>
+          <div class="sub-upload-zone" onclick="document.getElementById('sub-file-input').click()">
+            <input type="file" id="sub-file-input" multiple onchange="handleSubFiles(event)"/>
+            <div style="font-size:24px;margin-bottom:4px">&#128206;</div>
+            <div style="font-size:12px;font-weight:700;color:var(--muted)">Clic para adjuntar archivos</div>
+            <div style="font-size:11px;color:var(--muted)">PDF, Word, im&aacute;genes, etc.</div>
+          </div>
+          <div id="sub-file-list"></div>
+          <div class="up-bar-wrap" id="sub-bar-wrap"><div class="up-bar" id="sub-bar"></div></div>
+          <button class="btn-p" id="sub-btn" onclick="submitActivity()" style="margin-top:8px">Enviar entrega &rarr;</button>
+          <div id="sub-status-wrap"></div>
+        </div>
+        <button class="btn-p" id="exam-btn" onclick="startExam()" style="margin-top:14px">Tomar examen de validaci&oacute;n &rarr;</button>
+      </div>
+
+      <div class="panel-view" id="panel-exam">
+        <button class="btn-g" style="width:auto;padding:8px 18px;font-size:13px;margin-bottom:16px" onclick="showPanel('module')">&larr; Volver al m&oacute;dulo</button>
+        <div class="exam-bar-bg"><div class="exam-bar" id="exam-bar" style="width:0%"></div></div>
+        <div class="tip" style="margin-bottom:16px">&#128221; Necesitas <strong>70% o m&aacute;s</strong> para aprobar y desbloquear el siguiente m&oacute;dulo.</div>
+        <div id="exam-qs"></div>
+        <button class="btn-p" onclick="submitExam()">Enviar respuestas &rarr;</button>
+      </div>
+
+      <div class="panel-view" id="panel-result">
+        <div class="res-hero">
+          <div class="res-emoji" id="res-emoji">&#127881;</div>
+          <div class="res-title" id="res-title">M&oacute;dulo completado</div>
+          <div class="res-score" id="res-score">0%</div>
+          <div class="res-sub" id="res-sub">0 de 0 correctas</div>
+          <div class="res-chip" id="res-chip">Aprobado</div>
+        </div>
+        <div id="level-complete-banner" style="display:none;background:linear-gradient(135deg,#fffde7,#fff8e1);border:2px solid #ffd54f;border-radius:var(--r);padding:20px;text-align:center;margin-bottom:12px">
+          <div style="font-size:36px;margin-bottom:6px">&#127942;</div>
+          <div style="font-size:16px;font-weight:900;color:#e65100" id="level-complete-msg"></div>
+        </div>
+        <button class="btn-p" id="res-btn" onclick="resultAction()">Continuar &rarr;</button>
+        <button class="btn-g" onclick="showPanel('modulos')">Volver al inicio</button>
+      </div>
+
+    </div></div>
+  </div>
+</div>
+
+<div id="screen-admin" class="screen">
+  <nav class="topnav">
+    <div class="nav-brand">
+      <div class="nav-icon">A</div>
+      <div><div class="nav-title">Administrador</div><div class="nav-sub"><span class="rt-dot"></span>Academia Monte Santo</div></div>
+    </div>
+    <div class="nav-right"><button class="btn-nav" onclick="doLogout()">Salir</button></div>
+  </nav>
+  <div class="page" style="max-width:980px">
+    <div class="a-tabs">
+      <div class="a-tab active" onclick="switchTab('modules',this)">&#128218; M&oacute;dulos</div>
+      <div class="a-tab" onclick="switchTab('users',this)">&#128101; Usuarios</div>
+      <div class="a-tab" onclick="switchTab('submissions',this)">&#128228; Entregas</div>
+      <div class="a-tab" onclick="switchTab('progress',this)">&#128202; Progreso</div>
+      <div class="a-tab" onclick="switchTab('settings',this)">&#9881;&#65039; Ajustes</div>
+    </div>
+    <div id="tab-modules">
+      <div class="stats" id="admin-stats"></div>
+      <div class="a-card"><h3>&#10133; Crear nuevo m&oacute;dulo</h3>
+        <div class="g2">
+          <div class="fr"><label>T&iacute;tulo del m&oacute;dulo</label><input type="text" id="nm-title" placeholder="Ej: Vida devocional"/></div>
+          <div class="fr"><label>Descripci&oacute;n corta</label><input type="text" id="nm-desc" placeholder="Ej: Fundamento de la vida cristiana"/></div>
+        </div>
+        <div class="g2">
+          <div class="fr"><label>Nivel</label><select id="nm-level"><option value="1">Nivel 1 &mdash; Fundamentos</option><option value="2">Nivel 2 &mdash; Crecimiento</option><option value="3">Nivel 3 &mdash; Madurez</option></select></div>
+          <div class="fr"><label>&iquest;Requiere entrega?</label><select id="nm-sub"><option value="false">No &mdash; solo examen</option><option value="true">S&iacute; &mdash; con entrega</option></select></div>
+        </div>
+        <button class="btn-s" onclick="createModule()">Crear m&oacute;dulo</button>
+      </div>
+      <div class="sec-label">M&oacute;dulos publicados</div>
+      <div id="adm-mods"></div>
+      <div id="mod-editor" class="editor-wrap">
+        <div class="a-card" style="border:2px solid var(--g5)">
+          <h3>&#9999;&#65039; Editando: <span id="ed-name" style="color:var(--g1)"></span></h3>
+          <div class="ai-box">
+            <h4>&#10024; Generador de preguntas con IA</h4>
+            <p style="font-size:12px;color:#6d28d9;margin-bottom:12px">Sigue los 3 pasos para generar preguntas usando Claude de forma gratuita.</p>
+
+            <!-- PASO 1 -->
+            <div style="background:white;border-radius:var(--rs);padding:14px;margin-bottom:10px;border:1px solid #e9d5ff">
+              <div style="font-size:11px;font-weight:800;color:#7c3aed;margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px">Paso 1 &mdash; Configura</div>
+              <div class="g2">
+                <div class="fr"><label>Tema o contenido del m&oacute;dulo</label><textarea id="ai-content" rows="3" placeholder="Ej: Los diez mandamientos, su significado y aplicaci&oacute;n en la vida cristiana..."></textarea></div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <div class="fr"><label>Cantidad de preguntas</label><select id="ai-count"><option value="3">3 preguntas</option><option value="5" selected>5 preguntas</option><option value="8">8 preguntas</option><option value="10">10 preguntas</option></select></div>
+                  <div class="fr"><label>Dificultad</label><select id="ai-difficulty"><option value="basica">B&aacute;sica</option><option value="intermedia" selected>Intermedia</option><option value="avanzada">Avanzada</option></select></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PASO 2 -->
+            <div style="background:white;border-radius:var(--rs);padding:14px;margin-bottom:10px;border:1px solid #e9d5ff">
+              <div style="font-size:11px;font-weight:800;color:#7c3aed;margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px">Paso 2 &mdash; Copia el prompt y p&eacute;galo en Claude</div>
+              <p style="font-size:12px;color:#6b7280;margin-bottom:10px">Haz clic en el bot&oacute;n, copia el prompt generado y p&eacute;galo en <strong>claude.ai</strong> (la misma app donde usas Claude).</p>
+              <div id="ai-prompt-box" style="display:none;background:#f5f3ff;border:1px solid #c4b5fd;border-radius:var(--rs);padding:12px;margin-bottom:10px;font-size:12px;color:#374151;line-height:1.6;white-space:pre-wrap;word-break:break-word;max-height:180px;overflow-y:auto"></div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn-ai" onclick="generarPrompt()"><span>&#128196;</span><span>Generar prompt</span></button>
+                <button class="btn-ai" id="copy-prompt-btn" style="display:none;background:linear-gradient(135deg,#059669,#10b981)" onclick="copiarPrompt()"><span>&#128203;</span><span>Copiar prompt</span></button>
+                <a href="https://claude.ai" target="_blank" id="open-claude-btn" style="display:none;padding:9px 18px;background:linear-gradient(135deg,#1a3a5c,#2563eb);color:#fff;border-radius:var(--rs);font-size:13px;font-weight:800;text-decoration:none;display:none;align-items:center;gap:6px">&#128279; Abrir Claude</a>
+              </div>
+            </div>
+
+            <!-- PASO 3 -->
+            <div style="background:white;border-radius:var(--rs);padding:14px;border:1px solid #e9d5ff">
+              <div style="font-size:11px;font-weight:800;color:#7c3aed;margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px">Paso 3 &mdash; Pega la respuesta de Claude aqu&iacute;</div>
+              <p style="font-size:12px;color:#6b7280;margin-bottom:8px">Copia toda la respuesta que te dio Claude y p&eacute;gala aqu&iacute;. La plataforma detectar&aacute; el JSON autom&aacute;ticamente.</p>
+              <div class="fr"><textarea id="ai-response" rows="5" placeholder='Pega aqu&#237; la respuesta completa de Claude...'></textarea></div>
+              <button class="btn-ai" onclick="importarPreguntas()"><span>&#128640;</span><span>Importar preguntas</span></button>
+              <div class="ai-spinner" id="ai-spinner"><div class="ai-spin"></div><span>Importando...</span></div>
+            </div>
+          </div>
+          <div style="margin-bottom:20px">
+            <div class="sec-label">Lecciones</div><div id="ed-lessons"></div>
+            <div class="a-card" style="background:var(--cream);border:1.5px dashed var(--g5);margin-top:10px">
+              <h3 style="font-size:13px">Agregar lecci&oacute;n</h3>
+              <div class="g2">
+                <div class="fr"><label>T&iacute;tulo</label><input type="text" id="nl-t" placeholder="Lecci&oacute;n 1 &mdash; Introducci&oacute;n"/></div>
+                <div class="fr"><label>Tiempo estimado</label><input type="text" id="nl-tm" placeholder="5 min de lectura"/></div>
+              </div>
+              <div class="fr"><label>Contenido</label><textarea id="nl-c" rows="5" placeholder="Escribe el contenido aqu&iacute;..."></textarea></div>
+              <div class="g2">
+                <div class="fr"><label>Vers&iacute;culo (opcional)</label><input type="text" id="nl-v" placeholder="Texto del vers&iacute;culo..."/></div>
+                <div class="fr"><label>Referencia b&iacute;blica</label><input type="text" id="nl-r" placeholder="Ej: Juan 3:16"/></div>
+              </div>
+              <div class="fr"><label>PDF, Word o PowerPoint</label>
+                <div class="upload-zone" onclick="document.getElementById('up-docs').click()">
+                  <input type="file" id="up-docs" multiple accept=".pdf,.doc,.docx,.ppt,.pptx" onchange="handleDocs(event)"/>
+                  <div class="u-icon">&#128196;</div><p>Clic para subir documentos</p><span>PDF, Word, PowerPoint</span>
+                </div>
+                <div class="up-bar-wrap" id="pw-docs"><div class="up-bar" id="pb-docs"></div></div>
+                <div id="docs-list"></div>
+              </div>
+              <div class="fr"><label>Video o Audio</label>
+                <div class="upload-zone" onclick="document.getElementById('up-media').click()">
+                  <input type="file" id="up-media" multiple accept="video/*,audio/*" onchange="handleMedia(event)"/>
+                  <div class="u-icon">&#127910;</div><p>Clic para subir video o audio</p><span>MP4, MP3, WAV</span>
+                </div>
+                <div class="up-bar-wrap" id="pw-media"><div class="up-bar" id="pb-media"></div></div>
+                <div id="media-list"></div>
+              </div>
+              <button class="btn-s" onclick="addLesson()">Agregar lecci&oacute;n</button>
+            </div>
+          </div>
+          <div style="border-top:1px solid var(--border);padding-top:18px">
+            <div class="sec-label">Preguntas del examen</div><div id="ed-questions"></div>
+            <div class="a-card" style="background:var(--cream);border:1.5px dashed var(--g5);margin-top:10px">
+              <h3 style="font-size:13px">Agregar pregunta manualmente</h3>
+              <div class="fr"><label>Pregunta</label><input type="text" id="nq-t" placeholder="&iquest;Cu&aacute;l es el primer mandamiento?"/></div>
+              <div class="g2">
+                <div class="fr"><label>Opci&oacute;n A</label><input type="text" id="nq-a"/></div>
+                <div class="fr"><label>Opci&oacute;n B</label><input type="text" id="nq-b"/></div>
+                <div class="fr"><label>Opci&oacute;n C (opcional)</label><input type="text" id="nq-c"/></div>
+                <div class="fr"><label>Opci&oacute;n D (opcional)</label><input type="text" id="nq-d"/></div>
+              </div>
+              <div class="fr"><label>Respuesta correcta</label>
+                <select id="nq-ok"><option value="0">Opci&oacute;n A</option><option value="1">Opci&oacute;n B</option><option value="2">Opci&oacute;n C</option><option value="3">Opci&oacute;n D</option></select>
+              </div>
+              <button class="btn-s" onclick="addQuestion()">Agregar pregunta</button>
+            </div>
+          </div>
+          <div style="text-align:right;margin-top:16px"><button class="btn-g" style="width:auto;padding:9px 22px;font-size:13px" onclick="closeEditor()">Cerrar editor</button></div>
+        </div>
+      </div>
+    </div>
+    <div id="tab-users" style="display:none">
+      <div class="a-card"><h3>&#10133; Crear usuario estudiante</h3>
+        <div class="g2">
+          <div class="fr"><label>Nombre completo</label><input type="text" id="nu-n" placeholder="Ej: Juan P&eacute;rez"/></div>
+          <div class="fr"><label>Usuario</label><input type="text" id="nu-u" placeholder="Ej: juan.perez"/></div>
+          <div class="fr"><label>Contrase&ntilde;a</label><input type="password" id="nu-p"/></div>
+          <div class="fr"><label>C&oacute;digo (opcional)</label><input type="text" id="nu-c" placeholder="Ej: MS-2025-001"/></div>
+        </div>
+        <button class="btn-s" onclick="createUser()">Crear usuario</button>
+      </div>
+      <div class="sec-label">Estudiantes registrados</div>
+      <div id="users-list"></div>
+    </div>
+    <div id="tab-submissions" style="display:none"><div class="sec-label">Entregas de actividades</div><div id="submissions-admin-list"></div></div>
+    <div id="tab-progress" style="display:none"><div class="sec-label">Progreso por estudiante</div><div id="progress-list"></div></div>
+    <div id="tab-settings" style="display:none">
+      <div class="a-card"><h3>&#128273; Contrase&ntilde;a de administrador</h3>
+        <div class="fr"><label>Nueva contrase&ntilde;a</label><input type="password" id="new-ap"/></div>
+        <div class="fr"><label>Confirmar</label><input type="password" id="conf-ap"/></div>
+        <button class="btn-s" onclick="changeAdminPass()">Guardar</button>
+      </div>
+      <div class="a-card"><h3>&#128202; Resumen general</h3><div class="stats" id="settings-stats"></div></div>
+      <div class="a-card"><h3>&#128190; Exportar datos</h3><p style="font-size:13px;color:var(--muted);margin-bottom:12px">Descarga el progreso en formato JSON.</p><button class="btn-s" onclick="exportData()">Exportar JSON</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL='https://oojvczijherbcqkkfbyh.supabase.co';
+const SUPABASE_KEY='sb_publishable_HKw4-C-qg9y66MNohpIJOg_c8qX0MzU';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const LEVELS=[
+  {num:1,name:'Nivel 1 \u2014 Fundamentos',color:'lv1',emoji:'\uD83C\uDF31'},
+  {num:2,name:'Nivel 2 \u2014 Crecimiento',color:'lv2',emoji:'\uD83C\uDF3F'},
+  {num:3,name:'Nivel 3 \u2014 Madurez',color:'lv3',emoji:'\uD83C\uDF33'},
+];
+
+let CU=null,curMod=null,allMods=[],examAnswers={};
+let editingModId=null,pendingDocs=[],pendingMedia=[],pendingSubFiles=[],resetTarget=null,modsChannel=null;
+
+const $=id=>document.getElementById(id);
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$('screen-'+id).classList.add('active');window.scrollTo(0,0);}
+function showPanel(id){
+  document.querySelectorAll('.panel-view').forEach(p=>p.classList.remove('active'));
+  $('panel-'+id).classList.add('active');
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  const map={modulos:'sb-modulos',entregas:'sb-entregas',certificados:'sb-certificados',about:'sb-about',ayuda:'sb-ayuda'};
+  if(map[id])$(map[id]).classList.add('active');
+  $('sidebar').classList.remove('open');$('sb-overlay').classList.remove('open');
+  if(id==='entregas')loadMySubmissions();
+  if(id==='certificados')loadCertificates();
+}
+function toggleSidebar(){$('sidebar').classList.toggle('open');$('sb-overlay').classList.toggle('open');}
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+function openModal(id){$(id).classList.add('open');}
+function closeModal(id){$(id).classList.remove('open');}
+function initials(n){return(n||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
+function fmtSize(b){if(!b)return'';if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB';}
+function fileIcon(name,type){
+  if(/\.pdf$/i.test(name)||type==='application/pdf')return{cls:'fi-pdf',e:'\uD83D\uDCD5'};
+  if(/\.docx?$/i.test(name))return{cls:'fi-doc',e:'\uD83D\uDCD8'};
+  if(/\.pptx?$/i.test(name))return{cls:'fi-ppt',e:'\uD83D\uDCCA'};
+  if(type&&type.startsWith('video'))return{cls:'fi-vid',e:'\uD83C\uDFAC'};
+  if(type&&type.startsWith('audio'))return{cls:'fi-aud',e:'\uD83C\uDFB5'};
+  return{cls:'fi-other',e:'\uD83D\uDCCE'};
+}
+
+async function boot(){
+  const{data}=await sb.from('config').select('value').eq('key','admin_pass').single();
+  if(!data)await sb.from('config').insert({key:'admin_pass',value:'montesanto2025'});
+  $('loading-ov').classList.add('hidden');
+}
+boot();
+
+async function doLogin(){
+  const username=$('li-user').value.trim().toLowerCase();
+  const pass=$('li-pass').value;
+  $('login-err').style.display='none';
+  if(!username||!pass){toast('Ingresa usuario y contrase\u00f1a');return;}
+  const btn=$('login-btn');btn.textContent='Ingresando...';btn.disabled=true;
+  const{data,error}=await sb.from('students').select('*').eq('username',username).eq('password',pass).single();
+  btn.textContent='Entrar a estudiar \u2192';btn.disabled=false;
+  if(error||!data){$('login-err').style.display='block';return;}
+  CU={username:data.username,name:data.name};
+  $('app-av').textContent=initials(CU.name);$('app-nn').textContent=CU.name;
+  $('sb-av').textContent=initials(CU.name);$('sb-name').textContent=CU.name;
+  await refreshDashboard();
+  showScreen('app');showPanel('modulos');
+}
+async function doAdminLogin(){
+  const pass=$('adm-pass').value;
+  const{data}=await sb.from('config').select('value').eq('key','admin_pass').single();
+  if(!data||data.value!==pass){toast('Contrase\u00f1a incorrecta');return;}
+  closeModal('modal-admin');$('adm-pass').value='';
+  CU={username:'admin',name:'Administrador',isAdmin:true};
+  await renderAdmin();showScreen('admin');
+}
+function doLogout(){
+  if(modsChannel)sb.removeChannel(modsChannel);
+  modsChannel=null;CU=null;curMod=null;
+  $('li-user').value='';$('li-pass').value='';
+  $('login-err').style.display='none';
+  showScreen('login');
+}
+
+async function refreshDashboard(){
+  $('dash-greet').textContent='\u00a1Hola, '+CU.name.split(' ')[0]+'!';
+  const[{data:mods},{data:student}]=await Promise.all([
+    sb.from('modules').select('*').order('level',{ascending:true}).order('order',{ascending:true}),
+    sb.from('students').select('progress').eq('username',CU.username).single()
+  ]);
+  allMods=mods||[];
+  const prog=student?.progress||[];
+  const pct=allMods.length>0?Math.round((prog.length/allMods.length)*100):0;
+  $('dash-sub').innerHTML='<span class="rt-dot"></span>'+prog.length+' de '+allMods.length+' m\u00f3dulos completados';
+  $('ring-arc').style.strokeDashoffset=163.36-(pct/100)*163.36;
+  $('ring-pct').textContent=pct+'%';
+  $('sb-prog-bar').style.width=pct+'%';
+  $('sb-prog-txt').textContent=pct+'% completado';
+
+  const container=$('levels-container');container.innerHTML='';
+  if(!allMods.length){$('no-mods').style.display='block';return;}
+  $('no-mods').style.display='none';
+
+  LEVELS.forEach(lv=>{
+    const lvMods=allMods.filter(m=>parseInt(m.level)===lv.num||((!m.level||m.level===null)&&lv.num===1));
+    if(!lvMods.length)return;
+    const prevLvComplete=lv.num===1?true:isLevelComplete(lv.num-1,allMods,prog);
+    const lvDone=lvMods.filter(m=>prog.includes(m.id)).length;
+    const lvLocked=!prevLvComplete;
+    const block=document.createElement('div');block.className='level-block';
+    const hdr=document.createElement('div');
+    hdr.className='level-header '+(lvLocked?'locked-lv':lv.color);
+    hdr.innerHTML='<div class="level-badge">'+lv.emoji+'</div>'
+      +'<div class="level-info"><h3>'+lv.name+'</h3><p>'+lvMods.length+' m\u00f3dulo'+(lvMods.length!==1?'s':'')+'</p>'
+      +(lvLocked?'<div class="level-lock-msg">\uD83D\uDD12 Completa el Nivel '+(lv.num-1)+' para desbloquear</div>':'')
+      +'</div><div class="level-progress">'+lvDone+'/'+lvMods.length+'<br><span style="font-size:10px;opacity:.7">m\u00f3dulos</span></div>';
+    block.appendChild(hdr);
+    if(!lvLocked){
+      lvMods.forEach((mod,i)=>{
+        const isDone=prog.includes(mod.id);
+        const isAvail=i===0||prog.includes(lvMods[i-1]?.id);
+        const isLocked=!isDone&&!isAvail;
+        const lc=(mod.lessons||[]).length,qc=(mod.questions||[]).length;
+        const numCls=lv.num===2?'lv2-num':lv.num===3?'lv3-num':'';
+        const card=document.createElement('div');
+        card.className='mod-card'+(isLocked?' locked':'')+(isDone?' done':'');
+        card.onclick=isLocked?()=>toast('Completa el m\u00f3dulo anterior primero'):()=>openModule(mod,lvMods,prog);
+        card.innerHTML='<div class="mod-num '+numCls+'">'+(i+1)+'</div>'
+          +'<div class="mod-info"><h3>'+mod.title+'</h3><p>'+(mod.description||'')+(lc?' \u00b7 '+lc+' lecci\u00f3n'+(lc!==1?'es':''):'')+' \u00b7 '+qc+' pregunta'+(qc!==1?'s':'')+(mod.requires_submission?' \u00b7 \uD83D\uDCE4':'')+'</p></div>'
+          +'<span class="badge '+(isDone?'b-done':isAvail?'b-avail':'b-lock')+'">'+(isDone?'\u2713 Completado':isAvail?'Disponible':'\uD83D\uDD12 Bloqueado')+'</span>';
+        block.appendChild(card);
+      });
+    }
+    container.appendChild(block);
+  });
+
+  if(!modsChannel){
+    modsChannel=sb.channel('rt-dash')
+      .on('postgres_changes',{event:'*',schema:'public',table:'modules'},()=>refreshDashboard())
+      .on('postgres_changes',{event:'UPDATE',schema:'public',table:'students',filter:'username=eq.'+CU.username},()=>refreshDashboard())
+      .subscribe();
+  }
+}
+
+function isLevelComplete(lvNum,mods,prog){
+  const lvMods=mods.filter(m=>parseInt(m.level)===lvNum||(lvNum===1&&(!m.level||m.level===null)));
+  return lvMods.length>0&&lvMods.every(m=>prog.includes(m.id));
+}
+
+async function openModule(mod,lvMods,prog){
+  curMod={...mod,_lvMods:lvMods,_prog:prog};
+  const lvNum=parseInt(mod.level)||1;
+  $('mod-lbl').textContent='Nivel '+lvNum+' \u2014 M\u00f3dulo';
+  $('mod-title').textContent=mod.title;
+  $('mod-desc').textContent=mod.description||'';
+  $('mod-hero-el').className='mod-hero lv'+lvNum;
+  const{data:st}=await sb.from('students').select('progress').eq('username',CU.username).single();
+  const isDone=(st?.progress||[]).includes(mod.id);
+  const btn=$('exam-btn');
+  btn.textContent=isDone?'\u2713 Aprobado \u2014 Repasar examen':'Tomar examen de validaci\u00f3n \u2192';
+  btn.className='btn-p'+(isDone?' done-btn':'');
+  const subSec=$('submission-section');
+  if(mod.requires_submission){
+    subSec.style.display='block';pendingSubFiles=[];
+    $('sub-file-list').innerHTML='';$('sub-status-wrap').innerHTML='';
+    const{data:subs}=await sb.from('submissions').select('files,submitted_at').eq('username',CU.username).eq('module_id',mod.id).single();
+    if(subs?.files?.length)$('sub-status-wrap').innerHTML='<div class="sub-status sub-done">\u2713 Entrega enviada el '+new Date(subs.submitted_at).toLocaleDateString('es-CO')+'</div>';
+  }else{subSec.style.display='none';}
+
+  const cont=$('lessons-cont');cont.innerHTML='';
+  (mod.lessons||[]).forEach((lesson,li)=>{
+    const verse=lesson.verse?'<div class="verse-box">'+lesson.verse+'<span class="verse-ref">'+(lesson.ref||'')+'</span></div>':'';
+    let docsH='';
+    (lesson.docs||[]).forEach(f=>{const ic=fileIcon(f.name,f.type);docsH+='<div class="file-res" onclick="window.open(\''+f.url+'\',\'_blank\')"><div class="f-icon '+ic.cls+'">'+ic.e+'</div><div class="f-info"><div class="f-name">'+f.name+'</div><div class="f-size">'+fmtSize(f.size)+'</div></div><div class="f-act">Abrir \u2192</div></div>';});
+    let mediaH='';
+    (lesson.media||[]).forEach(m=>{const isV=m.type&&m.type.startsWith('video');mediaH+='<div style="margin-top:10px"><div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:4px">'+(isV?'\uD83C\uDFAC':'\uD83C\uDFB5')+' '+m.name+'</div><div class="media-wrap">'+(isV?'<video controls src="'+m.url+'"></video>':'<audio controls src="'+m.url+'" style="width:100%"></audio>')+'</div></div>';});
+    const block=document.createElement('div');block.className='lesson-block';
+    block.innerHTML='<div class="lesson-hdr" onclick="toggleL('+li+')">'
+      +'<div class="l-num">'+(li+1)+'</div>'
+      +'<div class="l-ht"><div class="l-title">'+lesson.title+'</div><div class="l-meta">'+(lesson.time||'')+'</div></div>'
+      +'<span class="l-chev" id="chev-'+li+'">\u25BA</span></div>'
+      +'<div class="lesson-body" id="lb-'+li+'">'+(lesson.content?'<p>'+lesson.content+'</p>':'')+verse+docsH+mediaH+'</div>';
+    cont.appendChild(block);
+  });
+  showPanel('module');
+}
+function toggleL(li){const b=$('lb-'+li),c=$('chev-'+li);const open=b.style.display==='block';b.style.display=open?'none':'block';c.classList.toggle('open',!open);}
+
+function handleSubFiles(e){Array.from(e.target.files).forEach(f=>{pendingSubFiles.push(f);renderSubFiles();});e.target.value='';}
+function renderSubFiles(){
+  $('sub-file-list').innerHTML=pendingSubFiles.map((f,i)=>{const ic=fileIcon(f.name,f.type);
+    return'<div class="sub-file-item"><span>'+ic.e+'</span><span class="sfn">'+f.name+'</span><span style="font-size:11px;color:var(--muted)">'+fmtSize(f.size)+'</span><button class="btn-d" style="padding:2px 8px;font-size:10px" onclick="pendingSubFiles.splice('+i+',1);renderSubFiles()">\u2715</button></div>';}).join('');
+}
+async function submitActivity(){
+  if(!pendingSubFiles.length){toast('Adjunta al menos un archivo');return;}
+  const btn=$('sub-btn');btn.disabled=true;btn.textContent='Enviando...';
+  $('sub-bar-wrap').style.display='block';
+  try{
+    const uploaded=[];
+    for(let i=0;i<pendingSubFiles.length;i++){
+      const f=pendingSubFiles[i];
+      $('sub-bar').style.width=Math.round((i/pendingSubFiles.length)*80)+'%';
+      const path='submissions/'+CU.username+'/'+curMod.id+'/'+Date.now()+'_'+f.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+      const{error}=await sb.storage.from('montesanto').upload(path,f,{upsert:true});
+      if(error)throw error;
+      const{data:u}=sb.storage.from('montesanto').getPublicUrl(path);
+      uploaded.push({name:f.name,size:f.size,type:f.type,url:u.publicUrl});
+    }
+    $('sub-bar').style.width='100%';
+    await sb.from('submissions').upsert({username:CU.username,module_id:curMod.id,student_name:CU.name,module_title:curMod.title,files:uploaded,submitted_at:new Date().toISOString()},{onConflict:'username,module_id'});
+    $('sub-status-wrap').innerHTML='<div class="sub-status sub-done">\u2713 Entrega enviada correctamente</div>';
+    pendingSubFiles=[];renderSubFiles();toast('\u2713 Actividad entregada');
+  }catch(err){toast('Error: '+err.message);}
+  finally{btn.disabled=false;btn.textContent='Enviar entrega \u2192';setTimeout(()=>{$('sub-bar-wrap').style.display='none';$('sub-bar').style.width='0%';},800);}
+}
+async function loadMySubmissions(){
+  const{data}=await sb.from('submissions').select('*').eq('username',CU.username).order('submitted_at',{ascending:false});
+  const list=$('my-submissions-list');list.innerHTML='';
+  if(!data?.length){list.innerHTML='<div class="empty-state"><div class="e-icon">\uD83D\uDCED</div><p>A\u00fan no has realizado ninguna entrega.</p></div>';return;}
+  data.forEach(sub=>{
+    const card=document.createElement('div');card.className='sub-admin-item';
+    card.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="flex:1"><div class="i-lbl">'+(sub.module_title||'M\u00f3dulo')+'</div><div class="sa-mod">Entregado el '+new Date(sub.submitted_at).toLocaleDateString('es-CO')+'</div></div><span class="sub-status sub-done" style="margin:0">\u2713 Entregado</span></div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:4px">'+(sub.files||[]).map(f=>'<a class="sa-file-link" href="'+f.url+'" target="_blank">'+fileIcon(f.name,f.type).e+' '+f.name+'</a>').join('')+'</div>';
+    list.appendChild(card);
+  });
+}
+async function loadCertificates(){
+  const[{data:mods},{data:student}]=await Promise.all([
+    sb.from('modules').select('id,level').order('level',{ascending:true}),
+    sb.from('students').select('progress').eq('username',CU.username).single()
+  ]);
+  const prog=student?.progress||[];
+  const list=$('certs-list');list.innerHTML='';let any=false;
+  LEVELS.forEach(lv=>{
+    const lvMods=(mods||[]).filter(m=>parseInt(m.level)===lv.num||(lv.num===1&&(!m.level||m.level===null)));
+    if(!lvMods.length)return;
+    const complete=lvMods.every(m=>prog.includes(m.id));
+    if(complete){
+      any=true;
+      const colors={1:'#2e7d32',2:'#283593',3:'#6a1b9a'};
+      list.innerHTML+='<div class="mv-card" style="border-color:'+colors[lv.num]+';margin-bottom:14px"><div style="text-align:center;padding:10px 0"><div style="font-size:48px;margin-bottom:8px">\uD83C\uDFC6</div><div style="font-size:18px;font-weight:900;color:var(--text);margin-bottom:4px">'+lv.name+'</div><div style="font-size:13px;color:var(--muted);margin-bottom:12px">Completado exitosamente</div><div style="background:var(--g6);border-radius:var(--rs);padding:12px;display:inline-block"><div style="font-size:12px;color:var(--g1);font-weight:700">'+CU.name+'</div><div style="font-size:11px;color:var(--muted)">Academia Monte Santo</div></div></div></div>';
+    }
+  });
+  if(!any)list.innerHTML='<div class="empty-state"><div class="e-icon">\uD83C\uDF93</div><p>Completa todos los m\u00f3dulos de un nivel para obtener tu certificado.</p></div>';
+}
+
+function startExam(){
+  if(!(curMod.questions||[]).length){toast('Este m\u00f3dulo a\u00fan no tiene preguntas');return;}
+  examAnswers={};$('exam-qs').innerHTML='';$('exam-bar').style.width='0%';
+  curMod.questions.forEach((q,qi)=>{
+    const opts=q.options.filter(o=>o&&o.trim());
+    const card=document.createElement('div');card.className='q-card';
+    card.innerHTML='<div class="q-lbl">Pregunta '+(qi+1)+' de '+curMod.questions.length+'</div><div class="q-txt">'+q.text+'</div>'
+      +opts.map((o,oi)=>'<div class="opt" id="opt-'+qi+'-'+oi+'" onclick="pickOpt('+qi+','+oi+','+opts.length+')"><div class="opt-dot">'+String.fromCharCode(65+oi)+'</div><span>'+o+'</span></div>').join('');
+    $('exam-qs').appendChild(card);
+  });
+  showPanel('exam');
+}
+function pickOpt(qi,oi,total){
+  for(let i=0;i<total;i++){const e=$('opt-'+qi+'-'+i);if(e)e.classList.remove('sel');}
+  $('opt-'+qi+'-'+oi).classList.add('sel');
+  examAnswers[qi]=oi;
+  $('exam-bar').style.width=Math.round((Object.keys(examAnswers).length/curMod.questions.length)*100)+'%';
+}
+async function submitExam(){
+  const total=curMod.questions.length;
+  if(Object.keys(examAnswers).length<total){toast('Responde todas las preguntas');return;}
+  let correct=0;
+  curMod.questions.forEach((q,qi)=>{
+    const ua=examAnswers[qi];
+    const ue=$('opt-'+qi+'-'+ua),ce=$('opt-'+qi+'-'+q.correct);
+    if(ua===q.correct){correct++;ue&&ue.classList.replace('sel','ok');}
+    else{ue&&ue.classList.replace('sel','err');ce&&ce.classList.add('ok');}
+  });
+  const pct=Math.round((correct/total)*100);const passed=pct>=70;
+  if(passed){
+    const{data}=await sb.from('students').select('progress').eq('username',CU.username).single();
+    const prog=data?.progress||[];
+    if(!prog.includes(curMod.id)){prog.push(curMod.id);await sb.from('students').update({progress:prog}).eq('username',CU.username);}
+    const lvNum=parseInt(curMod.level)||1;
+    const{data:mods}=await sb.from('modules').select('id,level');
+    const lvMods=(mods||[]).filter(m=>parseInt(m.level)===lvNum||(lvNum===1&&(!m.level||m.level===null)));
+    const lvNowDone=lvMods.every(m=>prog.includes(m.id)||m.id===curMod.id);
+    const banner=$('level-complete-banner');
+    if(lvNowDone&&LEVELS[lvNum-1]){banner.style.display='block';$('level-complete-msg').textContent='\uD83C\uDFC6 \u00a1Completaste el '+LEVELS[lvNum-1].name+'!';}
+    else banner.style.display='none';
+  }else $('level-complete-banner').style.display='none';
+  $('res-emoji').textContent=passed?'\uD83C\uDF89':'\uD83D\uDCD6';
+  $('res-title').textContent=passed?'\u00a1M\u00f3dulo completado con \u00e9xito!':'Sigue estudiando y vuelve a intentarlo';
+  $('res-score').textContent=pct+'%';
+  $('res-score').className='res-score '+(passed?'s-pass':'s-fail');
+  $('res-sub').textContent=correct+' de '+total+' respuestas correctas';
+  $('res-chip').textContent=passed?'\u2713 Aprobado':'\u2717 No aprobado \u2014 m\u00ednimo 70%';
+  $('res-chip').className='res-chip '+(passed?'c-pass':'c-fail');
+  $('res-btn')._passed=passed;
+  $('res-btn').textContent=passed?'Continuar \u2192':'Volver a estudiar \u2192';
+  showPanel('result');
+}
+function resultAction(){
+  const passed=$('res-btn')._passed;
+  if(!passed){showPanel('module');return;}
+  const lvMods=curMod._lvMods||[];
+  const idx=lvMods.findIndex(m=>m.id===curMod.id);
+  if(idx>=0&&idx<lvMods.length-1)openModule(lvMods[idx+1],lvMods,curMod._prog);
+  else{refreshDashboard();showPanel('modulos');}
+}
+
+// ── GENERADOR MANUAL ASISTIDO ────────────────────────────────────
+let _promptGenerado = '';
+
+function generarPrompt(){
+  const content = $('ai-content').value.trim();
+  const count = parseInt($('ai-count').value);
+  const diff = $('ai-difficulty').value;
+  if(!content){ toast('Escribe el tema del módulo primero'); return; }
+
+  _promptGenerado = `Eres un experto en pedagogía bíblica. Crea exactamente ${count} preguntas de selección múltiple de dificultad ${diff} basadas en este contenido:
+
+"${content}"
+
+Reglas:
+- Cada pregunta tiene exactamente 4 opciones
+- Solo una opción es correcta
+- Evalúa comprensión real del contenido
+- Responde SOLO con el array JSON, sin texto adicional, sin bloques de código
+
+Formato requerido:
+[{"text":"texto de la pregunta","options":["Opción A","Opción B","Opción C","Opción D"],"correct":0}]
+
+El campo "correct" es el índice 0-3 de la respuesta correcta.`;
+
+  const box = $('ai-prompt-box');
+  box.style.display = 'block';
+  box.textContent = _promptGenerado;
+  $('copy-prompt-btn').style.display = 'flex';
+  const openBtn = $('open-claude-btn');
+  openBtn.style.display = 'inline-flex';
+  toast('✓ Prompt generado — cópialo y pégalo en Claude');
+}
+
+function copiarPrompt(){
+  if(!_promptGenerado){ toast('Primero genera el prompt'); return; }
+  navigator.clipboard.writeText(_promptGenerado).then(()=>{
+    toast('✓ Prompt copiado al portapapeles');
+  }).catch(()=>{
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = _promptGenerado;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('✓ Prompt copiado');
+  });
+}
+
+async function importarPreguntas(){
+  if(!editingModId){ toast('Primero abre un módulo para editar'); return; }
+  const raw = $('ai-response').value.trim();
+  if(!raw){ toast('Pega la respuesta de Claude primero'); return; }
+  $('ai-spinner').classList.add('show');
+  try{
+    // Strip markdown fences if present
+    let clean = raw.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
+    // Extract JSON array
+    const match = clean.match(/\[[\s\S]*\]/);
+    if(!match) throw new Error('No se encontró un array JSON válido en la respuesta');
+    const questions = JSON.parse(match[0]);
+    if(!Array.isArray(questions)||!questions.length) throw new Error('El JSON no contiene preguntas');
+    // Validate structure
+    questions.forEach((q,i)=>{
+      if(!q.text||!Array.isArray(q.options)||q.options.length<2||q.correct===undefined)
+        throw new Error('Pregunta '+(i+1)+' tiene formato incorrecto');
+    });
+    const{data:mod}=await sb.from('modules').select('questions').eq('id',editingModId).single();
+    const merged=[...(mod?.questions||[]),...questions];
+    await sb.from('modules').update({questions:merged}).eq('id',editingModId);
+    renderEdQuestions(merged);
+    $('ai-response').value='';
+    $('ai-content').value='';
+    $('ai-prompt-box').style.display='none';
+    $('copy-prompt-btn').style.display='none';
+    $('open-claude-btn').style.display='none';
+    toast('✓ '+questions.length+' preguntas importadas y guardadas');
+  }catch(err){
+    toast('Error: '+err.message);
+    console.error(err);
+  }finally{
+    $('ai-spinner').classList.remove('show');
+  }
+}
+
+async function uploadToStorage(file,folder,pbEl,pwEl){
+  pwEl.style.display='block';pbEl.style.width='30%';
+  const path=folder+'/'+Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+  const{error}=await sb.storage.from('montesanto').upload(path,file,{upsert:true});
+  if(error){pwEl.style.display='none';throw error;}
+  pbEl.style.width='100%';
+  const{data:u}=sb.storage.from('montesanto').getPublicUrl(path);
+  setTimeout(()=>{pwEl.style.display='none';pbEl.style.width='0%';},600);
+  return u.publicUrl;
+}
+async function handleDocs(e){
+  for(const file of Array.from(e.target.files)){
+    toast('Subiendo '+file.name+'...');
+    try{const url=await uploadToStorage(file,'modules/'+editingModId+'/docs',$('pb-docs'),$('pw-docs'));pendingDocs.push({name:file.name,size:file.size,type:file.type,url});renderPendingDocs();toast('\u2713 '+file.name);}
+    catch(err){toast('Error: '+err.message);}
+  }e.target.value='';
+}
+async function handleMedia(e){
+  for(const file of Array.from(e.target.files)){
+    toast('Subiendo '+file.name+'...');
+    try{const url=await uploadToStorage(file,'modules/'+editingModId+'/media',$('pb-media'),$('pw-media'));pendingMedia.push({name:file.name,size:file.size,type:file.type,url});renderPendingMedia();toast('\u2713 '+file.name);}
+    catch(err){toast('Error: '+err.message);}
+  }e.target.value='';
+}
+function renderPendingDocs(){$('docs-list').innerHTML=pendingDocs.map((f,i)=>{const ic=fileIcon(f.name,f.type);return'<div class="ufile"><span style="font-size:18px">'+ic.e+'</span><span class="fn">'+f.name+'</span><span class="fs">'+fmtSize(f.size)+'</span><button class="btn-d" style="padding:3px 8px;font-size:10px" onclick="pendingDocs.splice('+i+',1);renderPendingDocs()">\u2715</button></div>';}).join('');}
+function renderPendingMedia(){$('media-list').innerHTML=pendingMedia.map((f,i)=>{const isV=f.type.startsWith('video');return'<div class="ufile"><span style="font-size:18px">'+(isV?'\uD83C\uDFAC':'\uD83C\uDFB5')+'</span><span class="fn">'+f.name+'</span><span class="fs">'+fmtSize(f.size)+'</span><button class="btn-d" style="padding:3px 8px;font-size:10px" onclick="pendingMedia.splice('+i+',1);renderPendingMedia()">\u2715</button></div>';}).join('');}
+
+function switchTab(tab,el){
+  document.querySelectorAll('.a-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
+  ['modules','users','submissions','progress','settings'].forEach(t=>$('tab-'+t).style.display=t===tab?'block':'none');
+  if(tab==='users')renderUsers();if(tab==='submissions')renderSubmissionsAdmin();
+  if(tab==='progress')renderProgress();if(tab==='settings')renderSettingsStats();
+}
+async function renderAdmin(){
+  await refreshAdminModules();
+  sb.channel('admin-rt').on('postgres_changes',{event:'*',schema:'public',table:'modules'},()=>refreshAdminModules()).subscribe();
+}
+async function refreshAdminModules(){
+  const[{data:mods},{data:students}]=await Promise.all([
+    sb.from('modules').select('*').order('level',{ascending:true}).order('order',{ascending:true}),
+    sb.from('students').select('username')
+  ]);
+  const totalL=(mods||[]).reduce((a,m)=>a+(m.lessons||[]).length,0);
+  const totalQ=(mods||[]).reduce((a,m)=>a+(m.questions||[]).length,0);
+  $('admin-stats').innerHTML='<div class="stat"><div class="s-num">'+(mods||[]).length+'</div><div class="s-lbl">M\u00f3dulos</div></div>'
+    +'<div class="stat"><div class="s-num">'+totalL+'</div><div class="s-lbl">Lecciones</div></div>'
+    +'<div class="stat"><div class="s-num">'+totalQ+'</div><div class="s-lbl">Preguntas</div></div>'
+    +'<div class="stat"><div class="s-num">'+(students||[]).length+'</div><div class="s-lbl">Estudiantes</div></div>';
+  const list=$('adm-mods');list.innerHTML='';
+  const lvColors={1:'#e8f5e9',2:'#e8eaf6',3:'#f3e5f5'};
+  LEVELS.forEach(lv=>{
+    const lvMods=(mods||[]).filter(m=>parseInt(m.level)===lv.num||(lv.num===1&&(!m.level||m.level===null)));
+    const hdr=document.createElement('div');
+    hdr.innerHTML='<div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:'+lvColors[lv.num]+';border-radius:var(--rs);margin-bottom:8px"><span>'+lv.emoji+'</span><span style="font-size:13px;font-weight:800;color:var(--text)">'+lv.name+'</span><span style="font-size:11px;color:var(--muted)">'+lvMods.length+' m\u00f3dulo(s)</span></div>';
+    list.appendChild(hdr);
+    if(!lvMods.length){const p=document.createElement('p');p.style.cssText='font-size:12px;color:var(--muted);padding:4px 14px 10px';p.textContent='Sin m\u00f3dulos en este nivel a\u00fan.';list.appendChild(p);}
+    lvMods.forEach((mod,i)=>{
+      const item=document.createElement('div');item.className='a-item';item.style.marginLeft='12px';
+      item.innerHTML='<div style="width:32px;height:32px;border-radius:8px;background:var(--g1);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0">'+(i+1)+'</div>'
+        +'<div style="flex:1"><div class="i-lbl">'+mod.title+'</div><div class="i-sub">'+(mod.lessons||[]).length+' lecci\u00f3n(es) \u00b7 '+(mod.questions||[]).length+' preg.'+(mod.requires_submission?' \u00b7 \uD83D\uDCE4':'')+'</div></div>'
+        +'<button class="btn-sm" onclick="editModule(\''+mod.id+'\',\''+mod.title.replace(/'/g,"\\'")+'\')" style="margin-right:6px">\u270F\uFE0F Editar</button>'
+        +'<button class="btn-d" onclick="deleteModule(\''+mod.id+'\')">Eliminar</button>';
+      list.appendChild(item);
+    });
+  });
+}
+async function createModule(){
+  const title=$('nm-title').value.trim(),desc=$('nm-desc').value.trim();
+  const level=parseInt($('nm-level').value),requiresSub=$('nm-sub').value==='true';
+  if(!title){toast('Ingresa un t\u00edtulo');return;}
+  const{data:mods}=await sb.from('modules').select('id').eq('level',level);
+  const order=(mods||[]).length;
+  const{error}=await sb.from('modules').insert({title,description:desc,lessons:[],questions:[],order,level,requires_submission:requiresSub});
+  if(error){toast('Error: '+error.message);return;}
+  $('nm-title').value='';$('nm-desc').value='';
+  toast('M\u00f3dulo creado \u2713');
+}
+async function deleteModule(id){
+  if(!confirm('\u00bfEliminar este m\u00f3dulo?'))return;
+  await sb.from('modules').delete().eq('id',id);
+  closeEditor();toast('M\u00f3dulo eliminado');
+}
+async function editModule(id,name){
+  editingModId=id;pendingDocs=[];pendingMedia=[];
+  $('docs-list').innerHTML='';$('media-list').innerHTML='';
+  $('ed-name').textContent=name;
+  $('mod-editor').classList.add('open');
+  $('mod-editor').scrollIntoView({behavior:'smooth'});
+  const{data}=await sb.from('modules').select('lessons,questions').eq('id',id).single();
+  if(data){renderEdLessons(data.lessons||[]);renderEdQuestions(data.questions||[]);}
+}
+function closeEditor(){$('mod-editor').classList.remove('open');editingModId=null;}
+function renderEdLessons(lessons){
+  const list=$('ed-lessons');list.innerHTML='';
+  if(!lessons.length){list.innerHTML='<p style="font-size:12px;color:var(--muted)">Sin lecciones a\u00fan.</p>';return;}
+  lessons.forEach((l,li)=>{const item=document.createElement('div');item.className='a-item';item.innerHTML='<div style="flex:1"><div class="i-lbl">'+l.title+'</div><div class="i-sub">'+(l.time||'')+' \u00b7 '+(l.docs||[]).length+' archivo(s) \u00b7 '+(l.media||[]).length+' media</div></div><button class="btn-d" onclick="deleteLesson('+li+')">Eliminar</button>';list.appendChild(item);});
+}
+function renderEdQuestions(questions){
+  const list=$('ed-questions');list.innerHTML='';
+  if(!questions.length){list.innerHTML='<p style="font-size:12px;color:var(--muted)">Sin preguntas. Usa la IA o a\u00f1ade manualmente.</p>';return;}
+  questions.forEach((q,qi)=>{const item=document.createElement('div');item.className='a-item';item.innerHTML='<div style="flex:1"><div class="i-lbl">'+q.text+'</div><div class="i-sub">Correcta: '+q.options[q.correct]+'</div></div><button class="btn-d" onclick="deleteQuestion('+qi+')">Eliminar</button>';list.appendChild(item);});
+}
+async function addLesson(){
+  if(!editingModId)return;
+  const title=$('nl-t').value.trim(),content=$('nl-c').value.trim();
+  if(!title||!content){toast('T\u00edtulo y contenido son obligatorios');return;}
+  const lesson={title,time:$('nl-tm').value.trim(),content,verse:$('nl-v').value.trim(),ref:$('nl-r').value.trim(),docs:[...pendingDocs],media:[...pendingMedia]};
+  const{data}=await sb.from('modules').select('lessons').eq('id',editingModId).single();
+  const lessons=[...(data?.lessons||[]),lesson];
+  await sb.from('modules').update({lessons}).eq('id',editingModId);
+  ['nl-t','nl-tm','nl-c','nl-v','nl-r'].forEach(id=>$(id).value='');
+  pendingDocs=[];pendingMedia=[];$('docs-list').innerHTML='';$('media-list').innerHTML='';
+  renderEdLessons(lessons);toast('Lecci\u00f3n agregada \u2713');
+}
+async function deleteLesson(li){const{data}=await sb.from('modules').select('lessons').eq('id',editingModId).single();const lessons=[...(data?.lessons||[])];lessons.splice(li,1);await sb.from('modules').update({lessons}).eq('id',editingModId);renderEdLessons(lessons);toast('Lecci\u00f3n eliminada');}
+async function addQuestion(){
+  if(!editingModId)return;
+  const text=$('nq-t').value.trim(),a=$('nq-a').value.trim(),b=$('nq-b').value.trim();
+  const c=$('nq-c').value.trim(),d=$('nq-d').value.trim();
+  const correct=parseInt($('nq-ok').value);
+  if(!text||!a||!b){toast('Pregunta y al menos 2 opciones requeridas');return;}
+  const options=[a,b,c,d].filter(o=>o);
+  const{data}=await sb.from('modules').select('questions').eq('id',editingModId).single();
+  const questions=[...(data?.questions||[]),{text,options,correct}];
+  await sb.from('modules').update({questions}).eq('id',editingModId);
+  ['nq-t','nq-a','nq-b','nq-c','nq-d'].forEach(id=>$(id).value='');$('nq-ok').value='0';
+  renderEdQuestions(questions);toast('Pregunta agregada \u2713');
+}
+async function deleteQuestion(qi){const{data}=await sb.from('modules').select('questions').eq('id',editingModId).single();const questions=[...(data?.questions||[])];questions.splice(qi,1);await sb.from('modules').update({questions}).eq('id',editingModId);renderEdQuestions(questions);toast('Pregunta eliminada');}
+
+async function createUser(){
+  const name=$('nu-n').value.trim(),username=$('nu-u').value.trim().toLowerCase().replace(/\s+/g,'.');
+  const pass=$('nu-p').value,code=$('nu-c').value.trim();
+  if(!name||!username||!pass){toast('Nombre, usuario y contrase\u00f1a son obligatorios');return;}
+  const{data:ex}=await sb.from('students').select('username').eq('username',username).single();
+  if(ex){toast('Ese nombre de usuario ya existe');return;}
+  const{error}=await sb.from('students').insert({name,username,password:pass,code:code||null,progress:[]});
+  if(error){toast('Error: '+error.message);return;}
+  ['nu-n','nu-u','nu-p','nu-c'].forEach(id=>$(id).value='');
+  renderUsers();toast('Usuario creado \u2713');
+}
+async function renderUsers(){
+  const{data:users}=await sb.from('students').select('*').order('created_at',{ascending:false});
+  const list=$('users-list');list.innerHTML='';
+  if(!users?.length){list.innerHTML='<p style="font-size:13px;color:var(--muted)">Ning\u00fan usuario a\u00fan.</p>';return;}
+  users.forEach(u=>{
+    const card=document.createElement('div');card.className='u-card';
+    card.innerHTML='<div class="u-av">'+initials(u.name)+'</div>'
+      +'<div class="u-info"><div class="u-name">'+u.name+(u.code?' <span class="pill pill-b">'+u.code+'</span>':'')+'</div>'
+      +'<div class="u-meta">@'+u.username+' \u00b7 '+(u.progress||[]).length+' m\u00f3dulo(s) completado(s)</div></div>'
+      +'<div class="u-acts"><button class="btn-sm" onclick="openReset(\''+u.username+'\',\''+u.name.replace(/'/g,"\\'")+'\')">&#128273;</button>'
+      +'<button class="btn-d" onclick="deleteUser(\''+u.username+'\')">Eliminar</button></div>';
+    list.appendChild(card);
+  });
+}
+function openReset(username,name){resetTarget=username;$('reset-lbl').textContent='@'+username+' \u2014 '+name;$('reset-pass').value='';openModal('modal-reset');}
+async function saveReset(){
+  const np=$('reset-pass').value;if(!np){toast('Ingresa una contrase\u00f1a');return;}
+  await sb.from('students').update({password:np}).eq('username',resetTarget);closeModal('modal-reset');toast('Contrase\u00f1a actualizada \u2713');
+}
+async function deleteUser(username){
+  if(!confirm('\u00bfEliminar al usuario @'+username+'?'))return;
+  await sb.from('students').delete().eq('username',username);renderUsers();toast('Usuario eliminado');
+}
+async function renderSubmissionsAdmin(){
+  const{data}=await sb.from('submissions').select('*').order('submitted_at',{ascending:false});
+  const list=$('submissions-admin-list');list.innerHTML='';
+  if(!data?.length){list.innerHTML='<div class="empty-state"><div class="e-icon">\uD83D\uDCED</div><p>Ninguna entrega a\u00fan.</p></div>';return;}
+  data.forEach(sub=>{
+    const card=document.createElement('div');card.className='sub-admin-item';
+    card.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'
+      +'<div class="u-av" style="width:34px;height:34px;font-size:12px">'+initials(sub.student_name||'?')+'</div>'
+      +'<div style="flex:1"><div class="sa-name">'+(sub.student_name||sub.username)+'</div><div class="sa-mod">'+(sub.module_title||'M\u00f3dulo')+' \u00b7 '+new Date(sub.submitted_at).toLocaleDateString('es-CO')+'</div></div>'
+      +'<span class="sub-status sub-done" style="margin:0">\u2713</span></div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:4px">'+(sub.files||[]).map(f=>'<a class="sa-file-link" href="'+f.url+'" target="_blank">'+fileIcon(f.name,f.type).e+' '+f.name+'</a>').join('')+'</div>';
+    list.appendChild(card);
+  });
+}
+async function renderProgress(){
+  const[{data:students},{data:mods}]=await Promise.all([
+    sb.from('students').select('*').order('created_at',{ascending:false}),
+    sb.from('modules').select('id,level,title').order('level',{ascending:true})
+  ]);
+  const list=$('progress-list');list.innerHTML='';
+  if(!students?.length){list.innerHTML='<div class="empty-state"><div class="e-icon">\uD83D\uDC65</div><p>Sin usuarios a\u00fan.</p></div>';return;}
+  students.forEach(u=>{
+    const done=(u.progress||[]).length,total=(mods||[]).length;
+    const pct=total>0?Math.round((done/total)*100):0;
+    const lvProgress=LEVELS.map(lv=>{
+      const lvMods=(mods||[]).filter(m=>parseInt(m.level)===lv.num||(lv.num===1&&(!m.level||m.level===null)));
+      const lvDone=lvMods.filter(m=>(u.progress||[]).includes(m.id)).length;
+      return'<span class="pill '+(lvDone===lvMods.length&&lvMods.length>0?'pill-g':'pill-b')+'" style="font-size:10px">'+lv.emoji+' '+lvDone+'/'+lvMods.length+'</span>';
+    }).join(' ');
+    const card=document.createElement('div');card.className='u-card';
+    card.innerHTML='<div class="u-av">'+initials(u.name)+'</div>'
+      +'<div class="u-info" style="flex:1"><div class="u-name">'+u.name+'</div>'
+      +'<div class="u-meta" style="margin-bottom:4px">@'+u.username+' \u00b7 '+done+'/'+total+' m\u00f3dulos</div>'
+      +'<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px">'+lvProgress+'</div>'
+      +'<div style="background:var(--cream2);border-radius:20px;height:5px"><div style="width:'+pct+'%;height:5px;border-radius:20px;background:var(--g3)"></div></div></div>'
+      +'<span class="pill '+(pct===100?'pill-g':'pill-b')+'" style="font-size:12px;padding:4px 12px">'+pct+'%</span>';
+    list.appendChild(card);
+  });
+}
+async function renderSettingsStats(){
+  const[{data:mods},{data:students},{data:subs}]=await Promise.all([
+    sb.from('modules').select('id'),sb.from('students').select('progress'),sb.from('submissions').select('id')
+  ]);
+  const totalDone=(students||[]).reduce((a,s)=>a+(s.progress||[]).length,0);
+  $('settings-stats').innerHTML='<div class="stat"><div class="s-num">'+(mods||[]).length+'</div><div class="s-lbl">M\u00f3dulos</div></div>'
+    +'<div class="stat"><div class="s-num">'+(students||[]).length+'</div><div class="s-lbl">Estudiantes</div></div>'
+    +'<div class="stat"><div class="s-num">'+totalDone+'</div><div class="s-lbl">Completados</div></div>'
+    +'<div class="stat"><div class="s-num">'+(subs||[]).length+'</div><div class="s-lbl">Entregas</div></div>';
+}
+async function changeAdminPass(){
+  const np=$('new-ap').value,cp=$('conf-ap').value;
+  if(!np){toast('Ingresa la nueva contrase\u00f1a');return;}
+  if(np!==cp){toast('Las contrase\u00f1as no coinciden');return;}
+  await sb.from('config').update({value:np}).eq('key','admin_pass');
+  $('new-ap').value='';$('conf-ap').value='';toast('Contrase\u00f1a actualizada \u2713');
+}
+async function exportData(){
+  const[{data:mods},{data:students},{data:subs}]=await Promise.all([
+    sb.from('modules').select('id,title,level,order').order('level',{ascending:true}),
+    sb.from('students').select('username,name,code,progress,created_at'),
+    sb.from('submissions').select('username,module_title,submitted_at')
+  ]);
+  const blob=new Blob([JSON.stringify({modules:mods,students,submissions:subs,exported:new Date().toISOString()},null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='academia-montesanto-'+new Date().toLocaleDateString('es-CO').replace(/\//g,'-')+'.json';a.click();URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
