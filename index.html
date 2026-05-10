@@ -13,6 +13,7 @@
   --white:#fff;--danger:#8b1a1a;--dbg:#fceaea;--ok:#1a6b4a;--okbg:#e8f5ee;
   --border:rgba(74,140,63,.15);--shadow:0 4px 24px rgba(45,90,39,.12);
   --shadowlg:0 10px 48px rgba(45,90,39,.18);--r:14px;--rs:9px;--sidebar:265px;
+  --acc:#d97706;--acc2:#b45309;--accbg:#fef3c7;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
@@ -238,6 +239,43 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);m
   .a-tab{font-size:10px;padding:7px 4px}.u-acts{flex-direction:column}
 }
 @media(max-width:480px){.login-box{margin:12px;padding:28px 18px}}
+
+.sb-progress-bar{background:#d97706 !important}
+.notes-box{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:16px;margin-top:14px}
+.notes-box h4{font-size:13px;font-weight:800;margin-bottom:10px}
+.notes-ta{width:100%;min-height:90px;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:13px;font-family:'Nunito',sans-serif;resize:vertical;outline:none;background:var(--cream)}
+.notes-ta:focus{border-color:#d97706;background:#fff}
+.notes-ok{font-size:11px;color:var(--ok);font-weight:700;margin-left:10px;display:none}
+.forum-box{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:16px;margin-top:12px}
+.forum-box h4{font-size:13px;font-weight:800;margin-bottom:10px}
+.fpost{padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--rs);margin-bottom:7px;background:var(--cream)}
+.fpost-hdr{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.fav{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--g1),var(--g3));color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0}
+.fname{font-size:12px;font-weight:800;color:var(--text)}.ftime{font-size:10px;color:var(--muted);margin-left:auto}
+.fcontent{font-size:13px;color:#374151;line-height:1.6}
+.finput{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:13px;font-family:'Nunito',sans-serif;resize:vertical;min-height:65px;outline:none;background:var(--cream);margin-bottom:7px}
+.finput:focus{border-color:var(--g3);background:#fff}
+.yt-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--rs);margin-top:10px}
+.yt-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.att-item{padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--rs);margin-bottom:7px;display:flex;align-items:center;gap:12px;background:#fff}
+.att-score{font-size:18px;font-weight:900;flex-shrink:0;width:50px;text-align:center}
+.att-score.pass{color:var(--ok)}.att-score.fail{color:var(--danger)}
+.att-info{flex:1}.att-mod{font-size:13px;font-weight:700;color:var(--text)}.att-meta{font-size:11px;color:var(--muted)}
+.att-chip{font-size:10px;padding:3px 8px;border-radius:20px;font-weight:700}
+.acp{background:var(--okbg);color:var(--ok)}.acf{background:var(--dbg);color:var(--danger)}
+.pts-banner{background:linear-gradient(135deg,#92400e,#d97706);border-radius:var(--r);padding:16px 20px;display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.pts-icon{font-size:30px}.pts-val{font-size:20px;font-weight:900;color:#fff;margin-bottom:2px}.pts-sub{font-size:12px;color:rgba(255,255,255,.65)}
+.badges-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.b-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:14px;text-align:center;flex:1;min-width:100px;max-width:130px}
+.b-card.locked{opacity:.3;filter:grayscale(1)}
+.b-icon{font-size:28px;margin-bottom:5px}.b-name{font-size:11px;font-weight:800;color:var(--text)}.b-desc{font-size:10px;color:var(--muted);margin-top:2px}
+.prof-hdr{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.prof-av{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--g1),var(--g3));color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;flex-shrink:0}
+.prof-name-big{font-size:18px;font-weight:900;color:var(--text);margin-bottom:2px}.prof-join{font-size:12px;color:var(--muted)}
+.admin-cmt{background:#fef3c7;border:1.5px solid #fbbf24;border-radius:var(--rs);padding:11px 13px;margin-top:8px}
+.admin-cmt-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.8px;font-weight:800;color:#b45309;margin-bottom:4px}
+.rec-link{text-align:center;margin-top:8px;font-size:12px}
+.rec-link a{color:var(--g2);cursor:pointer;font-weight:700}
 </style>
 </head>
 <body>
@@ -260,6 +298,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);m
     <div class="fg"><label>Usuario</label><input type="text" id="li-user" placeholder="Ingresa tu usuario" onkeydown="if(event.key==='Enter')doLogin()"/></div>
     <div class="fg"><label>Contrase&ntilde;a</label><input type="password" id="li-pass" placeholder="Tu contrase&ntilde;a" onkeydown="if(event.key==='Enter')doLogin()"/></div>
     <button class="btn-login" id="login-btn" onclick="doLogin()">Entrar a estudiar &rarr;</button>
+    <div class="rec-link"><a onclick="openModal('modal-recovery')">&#128273; &iquest;Olvidaste tu contrase&ntilde;a?</a></div>
     <div class="admin-link">&iquest;Eres del equipo? <a onclick="openModal('modal-admin')">Acceso administrador</a></div>
   </div>
 </div>
@@ -284,6 +323,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);m
   </div>
 </div>
 
+<div class="modal-ov" id="modal-recovery"><div class="modal-box"><h3>&#128273; Recuperar contrase&ntilde;a</h3><p style="font-size:13px;color:var(--muted);margin-bottom:14px">Ingresa tu usuario. El administrador podr&aacute; restablecerte la contrase&ntilde;a.</p><div class="fr"><label>Nombre de usuario</label><input type="text" id="rec-user" placeholder="Ej: juan.perez"/></div><div id="rec-msg" style="display:none;border-radius:var(--rs);padding:9px 12px;font-size:12px;margin-bottom:10px"></div><div style="display:flex;gap:8px"><button class="btn-s" onclick="sendRecovery()">Enviar solicitud</button><button class="btn-g" style="width:auto;padding:9px 18px;font-size:13px" onclick="closeModal('modal-recovery')">Cancelar</button></div></div></div>
 <div id="screen-app" class="screen">
   <nav class="topnav">
     <div class="nav-brand">
@@ -315,6 +355,10 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);m
         <div class="sb-section">Informaci&oacute;n</div>
         <div class="sb-item" id="sb-about" onclick="showPanel('about')"><span class="sb-icon">&#9962;</span><span>Acerca de Monte Santo</span></div>
         <div class="sb-item" id="sb-ayuda" onclick="showPanel('ayuda')"><span class="sb-icon">&#10067;</span><span>Ayuda</span></div>
+        <div class="sb-section">Mi cuenta</div>
+        <div class="sb-item" id="sb-perfil" onclick="showPanel('perfil')"><span class="sb-icon">&#128100;</span><span>Mi perfil</span></div>
+        <div class="sb-item" id="sb-puntos" onclick="showPanel('puntos')"><span class="sb-icon">&#11088;</span><span>Puntos e insignias</span></div>
+        <div class="sb-item" id="sb-intentos" onclick="showPanel('intentos')"><span class="sb-icon">&#128221;</span><span>Historial de ex&aacute;menes</span></div>
       </nav>
       <div class="sidebar-footer"><button class="sb-logout" onclick="doLogout()">Cerrar sesi&oacute;n</button></div>
     </aside>
@@ -389,17 +433,41 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);m
           <button class="btn-p" id="sub-btn" onclick="submitActivity()" style="margin-top:8px">Enviar entrega &rarr;</button>
           <div id="sub-status-wrap"></div>
         </div>
+        <div class="notes-box"><h4>&#128221; Mis notas</h4><textarea class="notes-ta" id="notes-area" placeholder="Escribe tus apuntes..."></textarea><div style="display:flex;align-items:center;margin-top:6px"><button class="btn-s" style="padding:7px 14px;font-size:12px" onclick="saveNote()">Guardar</button><span class="notes-ok" id="notes-saved">&#10003; Guardada</span></div></div>
+        <div class="forum-box"><h4>&#128172; Foro del m&oacute;dulo</h4><div id="forum-posts-cont" style="max-height:260px;overflow-y:auto;margin-bottom:10px"></div><textarea class="finput" id="forum-input" placeholder="Escribe una pregunta o comentario..."></textarea><button class="btn-s" style="padding:7px 14px;font-size:12px" onclick="postForum()">Publicar</button></div>
         <button class="btn-p" id="exam-btn" onclick="startExam()" style="margin-top:14px">Tomar examen de validaci&oacute;n &rarr;</button>
       </div>
 
       <div class="panel-view" id="panel-exam">
         <button class="btn-g" style="width:auto;padding:8px 18px;font-size:13px;margin-bottom:16px" onclick="showPanel('module')">&larr; Volver al m&oacute;dulo</button>
         <div class="exam-bar-bg"><div class="exam-bar" id="exam-bar" style="width:0%"></div></div>
-        <div class="tip" style="margin-bottom:16px">&#128221; Necesitas <strong>70% o m&aacute;s</strong> para aprobar y desbloquear el siguiente m&oacute;dulo.</div>
+        <div class="tip" style="margin-bottom:16px">&#128221; Necesitas <strong>70% o m&aacute;s</strong> para aprobar. Maximo <strong id="attempts-left-msg">3 intentos</strong> por examen.</div>
         <div id="exam-qs"></div>
         <button class="btn-p" onclick="submitExam()">Enviar respuestas &rarr;</button>
       </div>
 
+      <div class="panel-view" id="panel-perfil">
+        <div style="margin-bottom:18px"><h2 style="font-size:18px;font-weight:800;margin-bottom:4px">&#128100; Mi perfil</h2><p style="font-size:13px;color:var(--muted)">Informaci&oacute;n personal</p></div>
+        <div class="mv-card"><div class="prof-hdr"><div class="prof-av" id="prof-av-big">?</div><div><div class="prof-name-big" id="prof-name">-</div><div class="prof-join" id="prof-join">-</div></div></div>
+          <div class="g2"><div class="fr"><label>Nombre completo</label><input type="text" id="prof-fullname"/></div><div class="fr"><label>Tel&eacute;fono</label><input type="text" id="prof-phone" placeholder="+57 300 000 0000"/></div><div class="fr"><label>Ciudad</label><input type="text" id="prof-city" placeholder="Bogot&aacute;, Colombia"/></div></div>
+          <div class="fr"><label>Acerca de m&iacute;</label><textarea id="prof-bio" rows="3" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:13px;font-family:Nunito,sans-serif;resize:vertical;outline:none;background:var(--cream)" placeholder="Algo sobre ti..."></textarea></div>
+          <button class="btn-p" style="margin-top:10px" onclick="saveProfile()">Guardar perfil</button></div>
+        <div class="mv-card"><h3 style="font-size:14px;font-weight:800;margin-bottom:14px">&#128273; Cambiar contrase&ntilde;a</h3>
+          <div class="fr"><label>Contrase&ntilde;a actual</label><input type="password" id="prof-old-pass"/></div>
+          <div class="fr"><label>Nueva contrase&ntilde;a</label><input type="password" id="prof-new-pass"/></div>
+          <div class="fr"><label>Confirmar nueva</label><input type="password" id="prof-conf-pass"/></div>
+          <button class="btn-p" onclick="changeOwnPassword()">Cambiar contrase&ntilde;a</button></div>
+      </div>
+      <div class="panel-view" id="panel-puntos">
+        <div style="margin-bottom:18px"><h2 style="font-size:18px;font-weight:800;margin-bottom:4px">&#11088; Puntos e insignias</h2><p style="font-size:13px;color:var(--muted)">Tus logros en la Academia</p></div>
+        <div class="pts-banner"><div class="pts-icon">&#11088;</div><div><div class="pts-val" id="pts-total">0 puntos</div><div class="pts-sub">Gana puntos completando y aprobando examenes</div></div></div>
+        <div class="sec-label">Mis insignias</div><div class="badges-grid" id="badges-grid"></div>
+        <div class="mv-card" style="background:var(--g6);border-color:var(--g5)"><h3 style="font-size:13px;font-weight:800;color:var(--g1);margin-bottom:8px">&#127919; Como ganar puntos</h3><p style="font-size:13px;color:var(--text);line-height:1.8"><b>30 pts</b> al aprobar al 1er intento &#183; <b>20 pts</b> al 2o o 3er intento &#183; <b>100 pts</b> al completar un nivel</p></div>
+      </div>
+      <div class="panel-view" id="panel-intentos">
+        <div style="margin-bottom:18px"><h2 style="font-size:18px;font-weight:800;margin-bottom:4px">&#128221; Historial de ex&aacute;menes</h2><p style="font-size:13px;color:var(--muted)">Todos tus intentos de evaluacion - Maximo 3 intentos por examen</p></div>
+        <div id="attempts-list"></div>
+      </div>
       <div class="panel-view" id="panel-result">
         <div class="res-hero">
           <div class="res-emoji" id="res-emoji">&#127881;</div>
@@ -520,6 +588,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);m
                 <div class="up-bar-wrap" id="pw-media"><div class="up-bar" id="pb-media"></div></div>
                 <div id="media-list"></div>
               </div>
+              <div class="fr"><label>Video de YouTube (opcional)</label><input type="text" id="nl-yt" placeholder="https://www.youtube.com/watch?v=..."/></div>
               <button class="btn-s" onclick="addLesson()">Agregar lecci&oacute;n</button>
             </div>
           </div>
@@ -593,11 +662,14 @@ function showPanel(id){
   document.querySelectorAll('.panel-view').forEach(p=>p.classList.remove('active'));
   $('panel-'+id).classList.add('active');
   document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
-  const map={modulos:'sb-modulos',entregas:'sb-entregas',certificados:'sb-certificados',about:'sb-about',ayuda:'sb-ayuda'};
+  const map={modulos:'sb-modulos',entregas:'sb-entregas',certificados:'sb-certificados',about:'sb-about',ayuda:'sb-ayuda',perfil:'sb-perfil',puntos:'sb-puntos',intentos:'sb-intentos'};
   if(map[id])$(map[id]).classList.add('active');
   $('sidebar').classList.remove('open');$('sb-overlay').classList.remove('open');
   if(id==='entregas')loadMySubmissions();
   if(id==='certificados')loadCertificates();
+  if(id==='perfil')loadProfile();
+  if(id==='puntos')loadPoints();
+  if(id==='intentos')loadAttempts();
 }
 function toggleSidebar(){$('sidebar').classList.toggle('open');$('sb-overlay').classList.toggle('open');}
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
@@ -605,6 +677,8 @@ function openModal(id){$(id).classList.add('open');}
 function closeModal(id){$(id).classList.remove('open');}
 function initials(n){return(n||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
 function fmtSize(b){if(!b)return'';if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB';}
+function getYTId(u){if(!u)return null;try{var m=u.match(/[?&]v=([^&]{11})/);if(m)return m[1];var m2=u.match(/youtu\.be\/([^?&]{11})/);if(m2)return m2[1];return null;}catch(e){return null;}}
+
 function fileIcon(name,type){
   if(/\.pdf$/i.test(name)||type==='application/pdf')return{cls:'fi-pdf',e:'\uD83D\uDCD5'};
   if(/\.docx?$/i.test(name))return{cls:'fi-doc',e:'\uD83D\uDCD8'};
@@ -743,6 +817,13 @@ async function openModule(mod,lvMods,prog){
     let docsH='';
     (lesson.docs||[]).forEach(f=>{const ic=fileIcon(f.name,f.type);docsH+='<div class="file-res" onclick="window.open(\''+f.url+'\',\'_blank\')"><div class="f-icon '+ic.cls+'">'+ic.e+'</div><div class="f-info"><div class="f-name">'+f.name+'</div><div class="f-size">'+fmtSize(f.size)+'</div></div><div class="f-act">Abrir \u2192</div></div>';});
     let mediaH='';
+    if(lesson.youtube_url){
+      var _yi=getYTId(lesson.youtube_url);
+      if(_yi){
+        var _yf="https://www.youtube.com/embed/"+_yi;
+        mediaH+='<div style="margin-top:10px"><p style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:4px">Video</p><div class="yt-wrap"><iframe src="'+_yf+'" allowfullscreen></iframe></div></div>';
+      }
+    }
     (lesson.media||[]).forEach(m=>{const isV=m.type&&m.type.startsWith('video');mediaH+='<div style="margin-top:10px"><div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:4px">'+(isV?'\uD83C\uDFAC':'\uD83C\uDFB5')+' '+m.name+'</div><div class="media-wrap">'+(isV?'<video controls src="'+m.url+'"></video>':'<audio controls src="'+m.url+'" style="width:100%"></audio>')+'</div></div>';});
     const block=document.createElement('div');block.className='lesson-block';
     block.innerHTML='<div class="lesson-hdr" onclick="toggleL('+li+')">'
@@ -814,8 +895,9 @@ async function loadCertificates(){
   if(!any)list.innerHTML='<div class="empty-state"><div class="e-icon">\uD83C\uDF93</div><p>Completa todos los m\u00f3dulos de un nivel para obtener tu certificado.</p></div>';
 }
 
-function startExam(){
+async function startExam(){
   if(!(curMod.questions||[]).length){toast('Este m\u00f3dulo a\u00fan no tiene preguntas');return;}
+  const{data:_ad}=await sb.from('exam_attempts').select('id').eq('username',CU.username).eq('module_id',curMod.id);const _u=(_ad||[]).length;if(_u>=3){toast('Has agotado los 3 intentos para este examen');return;}const _l=3-_u;const _alm=document.getElementById('attempts-left-msg');if(_alm)_alm.textContent=_l+' intento'+(_l!==1?'s':'')+' restante'+(_l!==1?'s':'');
   examAnswers={};$('exam-qs').innerHTML='';$('exam-bar').style.width='0%';
   curMod.questions.forEach((q,qi)=>{
     const opts=q.options.filter(o=>o&&o.trim());
@@ -1066,11 +1148,12 @@ async function addLesson(){
   if(!editingModId)return;
   const title=$('nl-t').value.trim(),content=$('nl-c').value.trim();
   if(!title||!content){toast('T\u00edtulo y contenido son obligatorios');return;}
-  const lesson={title,time:$('nl-tm').value.trim(),content,verse:$('nl-v').value.trim(),ref:$('nl-r').value.trim(),docs:[...pendingDocs],media:[...pendingMedia]};
+  const _nly=document.getElementById('nl-yt');
+  const lesson={title,time:$('nl-tm').value.trim(),content,verse:$('nl-v').value.trim(),ref:$('nl-r').value.trim(),docs:[...pendingDocs],media:[...pendingMedia],youtube_url:(_nly&&_nly.value.trim())||null};
   const{data}=await sb.from('modules').select('lessons').eq('id',editingModId).single();
   const lessons=[...(data?.lessons||[]),lesson];
   await sb.from('modules').update({lessons}).eq('id',editingModId);
-  ['nl-t','nl-tm','nl-c','nl-v','nl-r'].forEach(id=>$(id).value='');
+  ['nl-t','nl-tm','nl-c','nl-v','nl-r'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});const _eyt=document.getElementById('nl-yt');if(_eyt)_eyt.value='';
   pendingDocs=[];pendingMedia=[];$('docs-list').innerHTML='';$('media-list').innerHTML='';
   renderEdLessons(lessons);toast('Lecci\u00f3n agregada \u2713');
 }
@@ -1124,20 +1207,59 @@ async function deleteUser(username){
   if(!confirm('\u00bfEliminar al usuario @'+username+'?'))return;
   await sb.from('students').delete().eq('username',username);renderUsers();toast('Usuario eliminado');
 }
+async function saveAdminComment(un,mid,btn){const el=document.getElementById('ci-'+un+'-'+mid.slice(0,8));if(!el)return;const c=el.value.trim();if(!c){toast('Escribe un comentario');return;}btn.disabled=true;btn.textContent='Guardando...';await sb.from('submissions').update({admin_comment:c,commented_at:new Date().toISOString()}).eq('username',un).eq('module_id',mid);btn.disabled=false;btn.textContent='OK';toast('Comentario guardado');}
 async function renderSubmissionsAdmin(){
   const{data}=await sb.from('submissions').select('*').order('submitted_at',{ascending:false});
   const list=$('submissions-admin-list');list.innerHTML='';
-  if(!data?.length){list.innerHTML='<div class="empty-state"><div class="e-icon">\uD83D\uDCED</div><p>Ninguna entrega a\u00fan.</p></div>';return;}
-  data.forEach(sub=>{
-    const card=document.createElement('div');card.className='sub-admin-item';
-    card.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'
-      +'<div class="u-av" style="width:34px;height:34px;font-size:12px">'+initials(sub.student_name||'?')+'</div>'
-      +'<div style="flex:1"><div class="sa-name">'+(sub.student_name||sub.username)+'</div><div class="sa-mod">'+(sub.module_title||'M\u00f3dulo')+' \u00b7 '+new Date(sub.submitted_at).toLocaleDateString('es-CO')+'</div></div>'
-      +'<span class="sub-status sub-done" style="margin:0">\u2713</span></div>'
-      +'<div style="display:flex;flex-wrap:wrap;gap:4px">'+(sub.files||[]).map(f=>'<a class="sa-file-link" href="'+f.url+'" target="_blank">'+fileIcon(f.name,f.type).e+' '+f.name+'</a>').join('')+'</div>';
+  if(!data?.length){list.innerHTML='<div class="empty-state"><div class="e-icon">&#128237;</div><p>Ninguna entrega.</p></div>';return;}
+  data.forEach(function(sub){
+    const iid='ci-'+sub.username+'-'+(sub.module_id||'').slice(0,8);
+    const card=document.createElement('div');
+    card.className='sub-admin-item';
+    // Header
+    const hdr=document.createElement('div');
+    hdr.style.cssText='display:flex;align-items:center;gap:10px;margin-bottom:8px';
+    hdr.innerHTML='<div class="u-av" style="width:34px;height:34px;font-size:12px">'+initials(sub.student_name||'?')+'</div>'
+      +'<div style="flex:1"><div class="sa-name">'+(sub.student_name||sub.username)+'</div>'
+      +'<div class="sa-mod">'+(sub.module_title||'Modulo')+' - '+new Date(sub.submitted_at).toLocaleDateString('es-CO')+'</div></div>'
+      +'<span class="sub-status sub-done" style="margin:0">OK</span>';
+    card.appendChild(hdr);
+    // Files
+    const filesDiv=document.createElement('div');
+    filesDiv.style.cssText='display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px';
+    (sub.files||[]).forEach(function(f){
+      const a=document.createElement('a');
+      a.className='sa-file-link';a.href=f.url;a.target='_blank';
+      a.innerHTML=fileIcon(f.name,f.type).e+' '+f.name;
+      filesDiv.appendChild(a);
+    });
+    card.appendChild(filesDiv);
+    // Existing comment
+    if(sub.admin_comment){
+      const cmt=document.createElement('div');cmt.className='admin-cmt';
+      cmt.innerHTML='<div class="admin-cmt-lbl">Comentario enviado</div><p style="font-size:13px;color:var(--text)">'+sub.admin_comment+'</p>';
+      card.appendChild(cmt);
+    }
+    // Comment input
+    const cmtDiv=document.createElement('div');cmtDiv.style.marginTop='10px';
+    const lbl=document.createElement('div');
+    lbl.style.cssText='font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px';
+    lbl.textContent='Retroalimentacion';
+    const ta=document.createElement('textarea');
+    ta.id=iid;ta.value=sub.admin_comment||'';
+    ta.style.cssText='width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:12px;font-family:Nunito,sans-serif;resize:vertical;min-height:55px;outline:none;background:var(--cream);margin-bottom:5px';
+    ta.placeholder='Escribe un comentario para el estudiante...';
+    const btn=document.createElement('button');
+    btn.className='btn-s';btn.style.cssText='padding:6px 14px;font-size:12px';
+    btn.textContent='Guardar comentario';
+    btn.dataset.un=sub.username;btn.dataset.mid=sub.module_id;
+    btn.onclick=function(){saveAdminComment(this.dataset.un,this.dataset.mid,this);};
+    cmtDiv.appendChild(lbl);cmtDiv.appendChild(ta);cmtDiv.appendChild(btn);
+    card.appendChild(cmtDiv);
     list.appendChild(card);
   });
 }
+
 async function renderProgress(){
   const[{data:students},{data:mods}]=await Promise.all([
     sb.from('students').select('*').order('created_at',{ascending:false}),
@@ -1180,6 +1302,19 @@ async function changeAdminPass(){
   await sb.from('config').update({value:np}).eq('key','admin_pass');
   $('new-ap').value='';$('conf-ap').value='';toast('Contrase\u00f1a actualizada \u2713');
 }
+
+async function saveNote(){if(!curMod)return;const el=document.getElementById('notes-area');const c=el?el.value.trim():'';if(!c){toast('Escribe algo');return;}await sb.from('notes').upsert({username:CU.username,module_id:curMod.id,content:c,updated_at:new Date().toISOString()},{onConflict:'username,module_id'});const ok=document.getElementById('notes-saved');if(ok){ok.style.display='inline';setTimeout(()=>ok.style.display='none',2500);}}
+async function loadNote(mid){const el=document.getElementById('notes-area');if(el)el.value='';const{data}=await sb.from('notes').select('content').eq('username',CU.username).eq('module_id',mid).single();if(data&&el)el.value=data.content;}
+async function loadForum(mid){const{data}=await sb.from('forum_posts').select('*').eq('module_id',mid).order('created_at',{ascending:true});const cont=document.getElementById('forum-posts-cont');if(!cont)return;cont.innerHTML='';if(!data?.length){cont.innerHTML='<p style="font-size:12px;color:var(--muted);padding:6px 0">Se el primero en escribir en este foro.</p>';return;}data.forEach(p=>{const av=p.student_name?p.student_name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase():'?';const d=document.createElement('div');d.className='fpost';d.innerHTML='<div class="fpost-hdr"><div class="fav">'+av+'</div><span class="fname">'+p.student_name+'</span><span class="ftime">'+new Date(p.created_at).toLocaleDateString('es-CO')+'</span></div><div class="fcontent">'+p.content+'</div>';cont.appendChild(d);});cont.scrollTop=cont.scrollHeight;}
+async function postForum(){if(!curMod)return;const inp=document.getElementById('forum-input');const c=inp?inp.value.trim():'';if(!c){toast('Escribe algo');return;}await sb.from('forum_posts').insert({username:CU.username,student_name:CU.name,module_id:curMod.id,module_title:curMod.title,content:c});if(inp)inp.value='';loadForum(curMod.id);toast('Publicado');}
+async function loadProfile(){const{data}=await sb.from('students').select('*').eq('username',CU.username).single();if(!data)return;const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v||'';};const st=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v||'';};st('prof-av-big',initials(data.name));st('prof-name',data.name);st('prof-join','Miembro desde: '+(data.created_at?new Date(data.created_at).toLocaleDateString('es-CO'):'---'));sv('prof-fullname',data.name);sv('prof-phone',data.phone);sv('prof-city',data.city);sv('prof-bio',data.bio);}
+async function saveProfile(){const name=(document.getElementById('prof-fullname')||{}).value?.trim()||CU.name;const updates={name,phone:(document.getElementById('prof-phone')||{}).value||'',city:(document.getElementById('prof-city')||{}).value||'',bio:(document.getElementById('prof-bio')||{}).value||''};const{error}=await sb.from('students').update(updates).eq('username',CU.username);if(error){toast('Error: '+error.message);return;}CU.name=name;['app-av','sb-av','prof-av-big'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=initials(name);});['app-nn','sb-name','prof-name'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=name;});toast('Perfil actualizado');}
+async function changeOwnPassword(){const op=(document.getElementById('prof-old-pass')||{}).value;const np=(document.getElementById('prof-new-pass')||{}).value;const cp=(document.getElementById('prof-conf-pass')||{}).value;if(!op||!np||!cp){toast('Completa todos los campos');return;}if(np!==cp){toast('Las contrasenas no coinciden');return;}const{data}=await sb.from('students').select('password').eq('username',CU.username).single();if(data?.password!==op){toast('La contrasena actual es incorrecta');return;}await sb.from('students').update({password:np}).eq('username',CU.username);['prof-old-pass','prof-new-pass','prof-conf-pass'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});toast('Contrasena actualizada');}
+const ALL_BADGES=[{id:'primer_modulo',name:'Primer paso',desc:'Completaste tu primer modulo',emoji:'&#127793;'},{id:'tres_modulos',name:'En camino',desc:'Completaste 3 modulos',emoji:'&#128640;'},{id:'nivel_1',name:'Nivel 1',desc:'Nivel 1 completado',emoji:'&#127807;'},{id:'nivel_2',name:'Nivel 2',desc:'Nivel 2 completado',emoji:'&#127795;'},{id:'nivel_3',name:'Graduado',desc:'Academia completada',emoji:'&#127891;'}];
+async function loadPoints(){const{data}=await sb.from('students').select('points,badges').eq('username',CU.username).single();const pts=data?.points||0;const earned=data?.badges||[];const el=document.getElementById('pts-total');if(el)el.textContent=pts+' puntos';const grid=document.getElementById('badges-grid');if(!grid)return;grid.innerHTML='';ALL_BADGES.forEach(b=>{const has=earned.includes(b.id);const c=document.createElement('div');c.className='b-card'+(has?'':' locked');c.innerHTML='<div class="b-icon">'+b.emoji+'</div><div class="b-name">'+b.name+'</div><div class="b-desc">'+b.desc+'</div>';grid.appendChild(c);});}
+async function loadAttempts(){const{data}=await sb.from('exam_attempts').select('*').eq('username',CU.username).order('attempted_at',{ascending:false});const list=document.getElementById('attempts-list');if(!list)return;list.innerHTML='';if(!data?.length){list.innerHTML='<div class="empty-state"><div class="e-icon">&#128203;</div><p>Aun no has presentado ningun examen.</p></div>';return;}data.forEach(a=>{const it=document.createElement('div');it.className='att-item';it.innerHTML='<div class="att-score '+(a.passed?'pass':'fail')+'">'+a.score+'%</div><div class="att-info"><div class="att-mod">'+(a.module_title||'Modulo')+'</div><div class="att-meta">'+a.correct+' de '+a.total+' correctas - '+new Date(a.attempted_at).toLocaleDateString('es-CO')+'</div></div><span class="att-chip '+(a.passed?'acp':'acf')+'">'+(a.passed?'Aprobado':'No aprobado')+'</span>';list.appendChild(it);});}
+async function sendRecovery(){const username=(document.getElementById('rec-user')||{}).value?.trim().toLowerCase();if(!username){toast('Ingresa tu usuario');return;}const{data}=await sb.from('students').select('username').eq('username',username).single();const msg=document.getElementById('rec-msg');if(!msg)return;if(!data){msg.style.cssText='display:block;background:var(--dbg);color:var(--danger);border:1px solid var(--danger);border-radius:var(--rs);padding:9px 12px;font-size:12px;margin-bottom:10px';msg.textContent='No se encontro ese usuario.';return;}msg.style.cssText='display:block;background:var(--okbg);color:var(--ok);border:1px solid var(--ok);border-radius:var(--rs);padding:9px 12px;font-size:12px;margin-bottom:10px';msg.textContent='Solicitud registrada. Contacta al administrador con tu usuario: @'+username;}
+const _oOM=openModule;openModule=async function(mod,lvMods,prog){await _oOM(mod,lvMods,prog);loadNote(mod.id);loadForum(mod.id);};
 async function exportData(){
   const[{data:mods},{data:students},{data:subs}]=await Promise.all([
     sb.from('modules').select('id,title,level,order').order('level',{ascending:true}),
