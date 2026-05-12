@@ -276,10 +276,88 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);m
 .admin-cmt-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.8px;font-weight:800;color:#b45309;margin-bottom:4px}
 .rec-link{text-align:center;margin-top:8px;font-size:12px}
 .rec-link a{color:var(--g2);cursor:pointer;font-weight:700}
+
+/* WELCOME */
+#welcome-screen{display:none}
+
+/* PANEL TRANSITIONS */
+.panel-view{opacity:0;transform:translateY(8px);transition:opacity .25s ease,transform .25s ease}
+.panel-view.active{opacity:1;transform:translateY(0)}
+
+/* MODULE CARD LEVEL COLORS */
+.mod-card.lv1-card{border-left:3px solid #2d5a27}
+.mod-card.lv1-card .mod-num{background:#eaf7e7;color:#2d5a27}
+.mod-card.lv2-card{border-left:3px solid #1a237e}
+.mod-card.lv2-card .mod-num{background:#e8eaf6;color:#1a237e}
+.mod-card.lv3-card{border-left:3px solid #4a148c}
+.mod-card.lv3-card .mod-num{background:#f3e5f5;color:#4a148c}
+.mod-card.done.lv1-card{border-left:4px solid #2d5a27}
+.mod-card.done.lv2-card{border-left:4px solid #1a237e}
+.mod-card.done.lv3-card{border-left:4px solid #4a148c}
+
+/* DRAG AND DROP */
+.drag-handle{cursor:grab;color:var(--muted);padding:0 6px;font-size:16px;user-select:none}
+.drag-handle:active{cursor:grabbing}
+.a-item.dragging{opacity:.4;background:var(--g6)}
+.a-item.drag-over{border:2px dashed var(--g3);background:var(--g6)}
+
+/* EXAM TIMER */
+.exam-timer{display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:12px 20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.timer-circle{width:48px;height:48px;border-radius:50%;background:var(--g6);border:3px solid var(--g3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:var(--g1);transition:all .5s}
+.timer-circle.warning{background:#fef3c7;border-color:#d97706;color:#b45309}
+.timer-circle.danger{background:var(--dbg);border-color:var(--danger);color:var(--danger);animation:timerPulse .5s infinite}
+@keyframes timerPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.timer-info{flex:1}
+.timer-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}
+.timer-remaining{font-size:13px;font-weight:700;color:var(--text);margin-top:2px}
+
+/* APPROVE MESSAGE */
+.approve-msg-banner{border-radius:var(--r);padding:20px 22px;text-align:center;margin-bottom:12px;border:2px solid #fbbf24;background:linear-gradient(135deg,#fffde7,#fff8e1)}
+.approve-msg-icon{font-size:36px;margin-bottom:8px}
+.approve-msg-text{font-size:15px;font-weight:700;color:#b45309;line-height:1.6;font-family:'Caveat',cursive;font-size:18px}
+
+/* SIDEBAR NOTIFICATION DOT */
+.sb-notif{display:inline-flex;align-items:center;justify-content:center;background:#ef4444;color:#fff;font-size:9px;font-weight:900;width:16px;height:16px;border-radius:50%;margin-left:auto;flex-shrink:0}
+
+/* ADMIN BUZÓN */
+.buzon-item{padding:13px 15px;border:1.5px solid var(--border);border-radius:var(--rs);margin-bottom:8px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.buzon-item.unread{border-left:3px solid var(--g2);background:var(--g6)}
+.buzon-hdr{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.buzon-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--g1),var(--g3));color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0}
+.buzon-name{font-size:12px;font-weight:800;color:var(--text)}
+.buzon-mod{font-size:11px;color:var(--muted);margin-left:auto}
+.buzon-content{font-size:13px;color:#374151;line-height:1.6}
+.buzon-type{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700}
+.bt-foro{background:#e8f0fe;color:#1565c0}
+.bt-entrega{background:var(--okbg);color:var(--ok)}
+
+/* LOGIN BLOCK BANNER */
+.login-block{background:var(--dbg);border:1px solid rgba(139,26,26,.25);border-radius:var(--rs);padding:10px 12px;font-size:12px;color:var(--danger);margin-bottom:12px;display:none;text-align:center}
+
+/* SESSION WARNING */
+.session-warn{position:fixed;bottom:70px;right:20px;background:#b45309;color:#fff;padding:12px 18px;border-radius:var(--r);font-size:13px;font-weight:700;z-index:999;box-shadow:var(--shadow);display:none;max-width:280px}
+.session-warn button{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);color:#fff;padding:4px 12px;border-radius:var(--rs);font-size:11px;font-weight:700;cursor:pointer;margin-left:8px;font-family:'Nunito',sans-serif}
 </style>
 </head>
 <body>
 <div class="loading-ov" id="loading-ov"><div class="spin"></div><div class="load-txt">Cargando Academia Monte Santo...</div></div>
+
+
+<div id="welcome-screen" style="display:none;position:fixed;inset:0;z-index:600;background:linear-gradient(155deg,#eaf5e7,#d4ecce,#bde0b5);align-items:center;justify-content:center;flex-direction:column">
+  <div id="welcome-logo" style="opacity:0;transform:scale(.7) translateY(30px);transition:all .8s cubic-bezier(.34,1.56,.64,1)">
+    <svg viewBox="0 0 220 165" width="120" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(12,8)" opacity="0.45"><path d="M 42,148 Q 46,75 80,42 Q 100,20 116,60 Q 132,20 152,42 Q 186,75 190,148" fill="none" stroke="#9dd494" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <path d="M 38,148 Q 43,72 78,38 Q 100,14 116,55 Q 132,14 154,38 Q 188,72 192,148" fill="none" stroke="#4a8c3f" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div id="welcome-text" style="opacity:0;transform:translateY(20px);transition:all .6s ease .5s;text-align:center;margin-top:16px">
+    <div style="font-size:22px;font-weight:900;color:var(--g1);letter-spacing:2px;margin-bottom:4px">Academia Monte Santo</div>
+    <div id="welcome-name" style="font-family:'Caveat',cursive;font-size:20px;color:var(--g2)">Bienvenido</div>
+  </div>
+  <div id="welcome-bar" style="margin-top:28px;width:160px;height:4px;background:rgba(74,140,63,.15);border-radius:20px;overflow:hidden;opacity:0;transition:opacity .4s ease .8s">
+    <div id="welcome-bar-fill" style="height:4px;width:0%;background:var(--g2);border-radius:20px;transition:width 1.2s ease .9s"></div>
+  </div>
+</div>
 
 <div id="screen-login" class="screen active">
   <div class="deco-tl"></div><div class="deco-br"></div><div class="deco-orb"></div>
@@ -294,6 +372,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);m
     </div>
     <div class="login-name">Academia Monte Santo</div>
     <div class="login-slogan">El refugio de Su Santidad en lo alto.</div>
+    <div class="login-block" id="login-block"></div>
     <div class="login-err" id="login-err">Usuario o contrase&ntilde;a incorrectos.</div>
     <div class="fg"><label>Usuario</label><input type="text" id="li-user" placeholder="Ingresa tu usuario" onkeydown="if(event.key==='Enter')doLogin()"/></div>
     <div class="fg"><label>Contrase&ntilde;a</label><input type="password" id="li-pass" placeholder="Tu contrase&ntilde;a" onkeydown="if(event.key==='Enter')doLogin()"/></div>
@@ -350,7 +429,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);m
       <nav class="sidebar-nav">
         <div class="sb-section">Estudio</div>
         <div class="sb-item active" id="sb-modulos" onclick="showPanel('modulos')"><span class="sb-icon">&#128218;</span><span>Mis m&oacute;dulos</span></div>
-        <div class="sb-item" id="sb-entregas" onclick="showPanel('entregas')"><span class="sb-icon">&#128228;</span><span>Mis entregas</span></div>
+        <div class="sb-item" id="sb-entregas" onclick="showPanel('entregas')"><span class="sb-icon">&#128228;</span><span>Mis entregas</span><span class="sb-notif" id="sb-notif-entregas" style="display:none">!</span></div>
         <div class="sb-item" id="sb-certificados" onclick="showPanel('certificados')"><span class="sb-icon">&#127891;</span><span>Mis certificados</span></div>
         <div class="sb-section">Informaci&oacute;n</div>
         <div class="sb-item" id="sb-about" onclick="showPanel('about')"><span class="sb-icon">&#9962;</span><span>Acerca de Monte Santo</span></div>
@@ -440,6 +519,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);m
 
       <div class="panel-view" id="panel-exam">
         <button class="btn-g" style="width:auto;padding:8px 18px;font-size:13px;margin-bottom:16px" onclick="showPanel('module')">&larr; Volver al m&oacute;dulo</button>
+        <div class="exam-timer" id="exam-timer-box" style="display:none"><div class="timer-circle" id="timer-circle">--</div><div class="timer-info"><div class="timer-label">Tiempo restante</div><div class="timer-remaining" id="timer-remaining">--</div></div></div>
         <div class="exam-bar-bg"><div class="exam-bar" id="exam-bar" style="width:0%"></div></div>
         <div class="tip" style="margin-bottom:16px">&#128221; Necesitas <strong>70% o m&aacute;s</strong> para aprobar. Maximo <strong id="attempts-left-msg">3 intentos</strong> por examen.</div>
         <div id="exam-qs"></div>
@@ -480,6 +560,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);m
           <div style="font-size:36px;margin-bottom:6px">&#127942;</div>
           <div style="font-size:16px;font-weight:900;color:#e65100" id="level-complete-msg"></div>
         </div>
+        <div class="approve-msg-banner" id="approve-msg-banner" style="display:none"><div class="approve-msg-icon">&#127881;</div><div class="approve-msg-text" id="approve-msg-text"></div></div>
         <button class="btn-p" id="res-btn" onclick="resultAction()">Continuar &rarr;</button>
         <button class="btn-g" onclick="showPanel('modulos')">Volver al inicio</button>
       </div>
@@ -502,6 +583,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);m
       <div class="a-tab" onclick="switchTab('users',this)">&#128101; Usuarios</div>
       <div class="a-tab" onclick="switchTab('submissions',this)">&#128228; Entregas</div>
       <div class="a-tab" onclick="switchTab('progress',this)">&#128202; Progreso</div>
+      <div class="a-tab" onclick="switchTab('buzon',this)">&#128235; Buz&oacute;n <span id="admin-buzon-count" style="background:#ef4444;color:#fff;font-size:9px;font-weight:900;padding:1px 5px;border-radius:10px;margin-left:3px;display:none">0</span></div>
       <div class="a-tab" onclick="switchTab('settings',this)">&#9881;&#65039; Ajustes</div>
     </div>
     <div id="tab-modules">
@@ -514,6 +596,8 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);m
         <div class="g2">
           <div class="fr"><label>Nivel</label><select id="nm-level"><option value="1">Nivel 1 &mdash; Fundamentos</option><option value="2">Nivel 2 &mdash; Crecimiento</option><option value="3">Nivel 3 &mdash; Madurez</option></select></div>
           <div class="fr"><label>&iquest;Requiere entrega?</label><select id="nm-sub"><option value="false">No &mdash; solo examen</option><option value="true">S&iacute; &mdash; con entrega</option></select></div>
+          <div class="fr"><label>Tiempo limite del examen (minutos, 0=sin limite)</label><input type="number" id="nm-timelimit" value="0" min="0" max="120"/></div>
+          <div class="fr"><label>Mensaje al aprobar (opcional)</label><input type="text" id="nm-approve-msg" placeholder="Ej: Excelente trabajo! Has completado este modulo con exito."/></div>
         </div>
         <button class="btn-s" onclick="createModule()">Crear m&oacute;dulo</button>
       </div>
@@ -628,6 +712,10 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);m
     </div>
     <div id="tab-submissions" style="display:none"><div class="sec-label">Entregas de actividades</div><div id="submissions-admin-list"></div></div>
     <div id="tab-progress" style="display:none"><div class="sec-label">Progreso por estudiante</div><div id="progress-list"></div></div>
+    <div id="tab-buzon" style="display:none">
+      <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between"><div><div class="sec-label">Buzon de mensajes</div><p style="font-size:12px;color:var(--muted)">Preguntas del foro y entregas de los estudiantes</p></div><button class="btn-sm" onclick="markAllRead()">Marcar todo como leido</button></div>
+      <div id="buzon-list"></div>
+    </div>
     <div id="tab-settings" style="display:none">
       <div class="a-card"><h3>&#128273; Contrase&ntilde;a de administrador</h3>
         <div class="fr"><label>Nueva contrase&ntilde;a</label><input type="password" id="new-ap"/></div>
@@ -641,11 +729,62 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);m
 </div>
 
 <div class="toast" id="toast"></div>
+<div class="session-warn" id="session-warn">Tu sesion expira en 5 min. <button onclick="renewSession()">Continuar</button></div>
 
 <script>
 const SUPABASE_URL='https://oojvczijherbcqkkfbyh.supabase.co';
 const SUPABASE_KEY='sb_publishable_HKw4-C-qg9y66MNohpIJOg_c8qX0MzU';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+
+// ── WELCOME SCREEN ──────────────────────────────────────────────
+function showWelcome(name){
+  var ws=document.getElementById('welcome-screen');
+  var wn=document.getElementById('welcome-name');
+  var wl=document.getElementById('welcome-logo');
+  var wt=document.getElementById('welcome-text');
+  var wb=document.getElementById('welcome-bar');
+  var wbf=document.getElementById('welcome-bar-fill');
+  if(!ws)return;
+  if(wn)wn.textContent='Bienvenido, '+name.split(' ')[0]+'!';
+  ws.style.display='flex';
+  setTimeout(function(){if(wl){wl.style.opacity='1';wl.style.transform='scale(1) translateY(0)';}},100);
+  setTimeout(function(){if(wt){wt.style.opacity='1';wt.style.transform='translateY(0)';}},400);
+  setTimeout(function(){if(wb)wb.style.opacity='1';if(wbf)wbf.style.width='100%';},700);
+  setTimeout(function(){
+    ws.style.transition='opacity .5s ease';
+    ws.style.opacity='0';
+    setTimeout(function(){ws.style.display='none';ws.style.opacity='1';},500);
+  },2400);
+}
+
+// ── SESSION TIMEOUT ──────────────────────────────────────────────
+var _sessionTimer=null;var _sessionWarnTimer=null;
+var SESSION_MS=30*60*1000;var WARN_MS=25*60*1000;
+function startSession(){
+  clearTimeout(_sessionTimer);clearTimeout(_sessionWarnTimer);
+  _sessionWarnTimer=setTimeout(function(){
+    var sw=document.getElementById('session-warn');if(sw)sw.style.display='block';
+  },WARN_MS);
+  _sessionTimer=setTimeout(function(){
+    var sw=document.getElementById('session-warn');if(sw)sw.style.display='none';
+    toast('Sesion expirada. Ingresa de nuevo.');
+    setTimeout(doLogout,1500);
+  },SESSION_MS);
+}
+function renewSession(){
+  var sw=document.getElementById('session-warn');if(sw)sw.style.display='none';
+  startSession();
+  toast('Sesion renovada');
+}
+document.addEventListener('click',function(){if(CU)startSession();});
+document.addEventListener('keydown',function(){if(CU)startSession();});
+
+// ── LOGIN BLOCK (5 failed attempts) ─────────────────────────────
+var _loginAttempts=0;var _loginBlocked=false;var _loginBlockTimer=null;
+
+// ── DRAG & DROP STATE ────────────────────────────────────────────
+var _dragSrcIdx=null;var _dragModLevel=null;
 
 const LEVELS=[
   {num:1,name:'Nivel 1 \u2014 Fundamentos',color:'lv1',emoji:'\uD83C\uDF31'},
@@ -659,7 +798,7 @@ let editingModId=null,pendingDocs=[],pendingMedia=[],pendingSubFiles=[],resetTar
 const $=id=>document.getElementById(id);
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$('screen-'+id).classList.add('active');window.scrollTo(0,0);}
 function showPanel(id){
-  document.querySelectorAll('.panel-view').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.panel-view').forEach(function(p){p.classList.remove('active');p.style.opacity='0';});
   $('panel-'+id).classList.add('active');
   document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
   const map={modulos:'sb-modulos',entregas:'sb-entregas',certificados:'sb-certificados',about:'sb-about',ayuda:'sb-ayuda',perfil:'sb-perfil',puntos:'sb-puntos',intentos:'sb-intentos'};
@@ -767,7 +906,8 @@ async function refreshDashboard(){
         const lc=(mod.lessons||[]).length,qc=(mod.questions||[]).length;
         const numCls=lv.num===2?'lv2-num':lv.num===3?'lv3-num':'';
         const card=document.createElement('div');
-        card.className='mod-card'+(isLocked?' locked':'')+(isDone?' done':'');
+        var lvClass=lv.num===1?'lv1-card':lv.num===2?'lv2-card':'lv3-card';
+        card.className='mod-card '+lvClass+(isLocked?' locked':'')+(isDone?' done':'');
         card.onclick=isLocked?()=>toast('Completa el m\u00f3dulo anterior primero'):()=>openModule(mod,lvMods,prog);
         card.innerHTML='<div class="mod-num '+numCls+'">'+(i+1)+'</div>'
           +'<div class="mod-info"><h3>'+mod.title+'</h3><p>'+(mod.description||'')+(lc?' \u00b7 '+lc+' lecci\u00f3n'+(lc!==1?'es':''):'')+' \u00b7 '+qc+' pregunta'+(qc!==1?'s':'')+(mod.requires_submission?' \u00b7 \uD83D\uDCE4':'')+'</p></div>'
@@ -1071,8 +1211,8 @@ function renderPendingMedia(){$('media-list').innerHTML=pendingMedia.map((f,i)=>
 
 function switchTab(tab,el){
   document.querySelectorAll('.a-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
-  ['modules','users','submissions','progress','settings'].forEach(t=>$('tab-'+t).style.display=t===tab?'block':'none');
-  if(tab==='users')renderUsers();if(tab==='submissions')renderSubmissionsAdmin();
+  ['modules','users','submissions','progress','buzon','settings'].forEach(function(t){var e=$('tab-'+t);if(e)e.style.display=t===tab?'block':'none';});
+  if(tab==='users')renderUsers();if(tab==='submissions')renderSubmissionsAdmin();if(tab==='buzon')renderBuzon();
   if(tab==='progress')renderProgress();if(tab==='settings')renderSettingsStats();
 }
 async function renderAdmin(){
@@ -1315,6 +1455,85 @@ async function loadPoints(){const{data}=await sb.from('students').select('points
 async function loadAttempts(){const{data}=await sb.from('exam_attempts').select('*').eq('username',CU.username).order('attempted_at',{ascending:false});const list=document.getElementById('attempts-list');if(!list)return;list.innerHTML='';if(!data?.length){list.innerHTML='<div class="empty-state"><div class="e-icon">&#128203;</div><p>Aun no has presentado ningun examen.</p></div>';return;}data.forEach(a=>{const it=document.createElement('div');it.className='att-item';it.innerHTML='<div class="att-score '+(a.passed?'pass':'fail')+'">'+a.score+'%</div><div class="att-info"><div class="att-mod">'+(a.module_title||'Modulo')+'</div><div class="att-meta">'+a.correct+' de '+a.total+' correctas - '+new Date(a.attempted_at).toLocaleDateString('es-CO')+'</div></div><span class="att-chip '+(a.passed?'acp':'acf')+'">'+(a.passed?'Aprobado':'No aprobado')+'</span>';list.appendChild(it);});}
 async function sendRecovery(){const username=(document.getElementById('rec-user')||{}).value?.trim().toLowerCase();if(!username){toast('Ingresa tu usuario');return;}const{data}=await sb.from('students').select('username').eq('username',username).single();const msg=document.getElementById('rec-msg');if(!msg)return;if(!data){msg.style.cssText='display:block;background:var(--dbg);color:var(--danger);border:1px solid var(--danger);border-radius:var(--rs);padding:9px 12px;font-size:12px;margin-bottom:10px';msg.textContent='No se encontro ese usuario.';return;}msg.style.cssText='display:block;background:var(--okbg);color:var(--ok);border:1px solid var(--ok);border-radius:var(--rs);padding:9px 12px;font-size:12px;margin-bottom:10px';msg.textContent='Solicitud registrada. Contacta al administrador con tu usuario: @'+username;}
 const _oOM=openModule;openModule=async function(mod,lvMods,prog){await _oOM(mod,lvMods,prog);loadNote(mod.id);loadForum(mod.id);};
+
+// ── EXAM TIMER ──────────────────────────────────────────────────
+var _examTimer=null;var _examTimeLeft=0;
+function startExamTimer(minutes){
+  clearInterval(_examTimer);
+  _examTimeLeft=minutes*60;
+  var box=document.getElementById('exam-timer-box');
+  var circle=document.getElementById('timer-circle');
+  var remaining=document.getElementById('timer-remaining');
+  if(box)box.style.display='flex';
+  function updateTimer(){
+    if(_examTimeLeft<=0){
+      clearInterval(_examTimer);
+      toast('Tiempo agotado. Enviando respuestas automaticamente...');
+      setTimeout(submitExam,1500);
+      return;
+    }
+    var m=Math.floor(_examTimeLeft/60);
+    var s=_examTimeLeft%60;
+    var txt=m+':'+(s<10?'0':'')+s;
+    if(circle)circle.textContent=txt;
+    if(remaining)remaining.textContent=_examTimeLeft>60?m+' min '+s+' seg':_examTimeLeft+' segundos';
+    if(_examTimeLeft<=60){
+      if(circle){circle.classList.remove('warning');circle.classList.add('danger');}
+    }else if(_examTimeLeft<=180){
+      if(circle){circle.classList.remove('danger');circle.classList.add('warning');}
+    }
+    _examTimeLeft--;
+  }
+  updateTimer();
+  _examTimer=setInterval(updateTimer,1000);
+}
+function stopExamTimer(){
+  clearInterval(_examTimer);_examTimer=null;
+  var box=document.getElementById('exam-timer-box');if(box)box.style.display='none';
+  var circle=document.getElementById('timer-circle');
+  if(circle){circle.classList.remove('warning','danger');}
+}
+
+// ── NOTIFICATIONS ────────────────────────────────────────────────
+async function checkNewComments(){
+  if(!CU||CU.isAdmin)return;
+  var{data}=await sb.from('submissions').select('admin_comment,commented_at').eq('username',CU.username);
+  var hasNew=(data||[]).some(function(s){return s.admin_comment&&s.admin_comment.length>0;});
+  var dot=document.getElementById('sb-notif-entregas');
+  if(dot)dot.style.display=hasNew?'inline-flex':'none';
+}
+
+// ── ADMIN BUZON ──────────────────────────────────────────────────
+async function renderBuzon(){
+  var list=document.getElementById('buzon-list');if(!list)return;list.innerHTML='';
+  var[fr,sr]=await Promise.all([
+    sb.from('forum_posts').select('*').order('created_at',{ascending:false}).limit(50),
+    sb.from('submissions').select('username,student_name,module_title,submitted_at,files').order('submitted_at',{ascending:false}).limit(50)
+  ]);
+  var posts=(fr.data||[]).map(function(p){return{type:'foro',name:p.student_name,mod:p.module_title,text:p.content,date:p.created_at};});
+  var subs=(sr.data||[]).map(function(s){return{type:'entrega',name:s.student_name||s.username,mod:s.module_title,text:(s.files||[]).length+' archivo(s) entregado(s)',date:s.submitted_at};});
+  var all=[...posts,...subs].sort(function(a,b){return new Date(b.date)-new Date(a.date);});
+  if(!all.length){list.innerHTML='<div class="empty-state"><div class="e-icon">&#128235;</div><p>El buzon esta vacio.</p></div>';return;}
+  // Update count badge
+  var cnt=document.getElementById('admin-buzon-count');
+  if(cnt){cnt.textContent=all.length;cnt.style.display='inline';}
+  all.forEach(function(item){
+    var av=item.name?item.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase():'?';
+    var div=document.createElement('div');div.className='buzon-item';
+    div.innerHTML='<div class="buzon-hdr"><div class="buzon-av">'+av+'</div>'
+      +'<span class="buzon-name">'+item.name+'</span>'
+      +'<span class="buzon-mod">'+(item.mod||'')+'</span>'
+      +'<span class="buzon-type '+(item.type==='foro'?'bt-foro':'bt-entrega')+'">'+(item.type==='foro'?'Foro':'Entrega')+'</span></div>'
+      +'<div class="buzon-content">'+item.text+'</div>'
+      +'<div style="font-size:10px;color:var(--muted);margin-top:4px">'+new Date(item.date).toLocaleDateString('es-CO')+' '+new Date(item.date).toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'})+'</div>';
+    list.appendChild(div);
+  });
+}
+function markAllRead(){toast('Todos los mensajes marcados como leidos');}
+
+// ── STOP TIMER when leaving exam ────────────────────────────────
+function backToMod(){stopExamTimer();showPanel('module');}
+
 async function exportData(){
   const[{data:mods},{data:students},{data:subs}]=await Promise.all([
     sb.from('modules').select('id,title,level,order').order('level',{ascending:true}),
