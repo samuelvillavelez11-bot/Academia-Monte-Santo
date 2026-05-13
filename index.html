@@ -281,8 +281,9 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);m
 #welcome-screen{display:none}
 
 /* PANEL TRANSITIONS */
-.panel-view{opacity:0;transform:translateY(8px);transition:opacity .25s ease,transform .25s ease}
-.panel-view.active{opacity:1;transform:translateY(0)}
+.panel-view{display:none !important}
+.panel-view.active{display:block !important;animation:panelIn .25s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 /* MODULE CARD LEVEL COLORS */
 .mod-card.lv1-card{border-left:3px solid #2d5a27}
@@ -798,7 +799,7 @@ let editingModId=null,pendingDocs=[],pendingMedia=[],pendingSubFiles=[],resetTar
 const $=id=>document.getElementById(id);
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$('screen-'+id).classList.add('active');window.scrollTo(0,0);}
 function showPanel(id){
-  document.querySelectorAll('.panel-view').forEach(function(p){p.classList.remove('active');p.style.opacity='0';});
+  document.querySelectorAll('.panel-view').forEach(function(p){p.classList.remove('active');});
   $('panel-'+id).classList.add('active');
   document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
   const map={modulos:'sb-modulos',entregas:'sb-entregas',certificados:'sb-certificados',about:'sb-about',ayuda:'sb-ayuda',perfil:'sb-perfil',puntos:'sb-puntos',intentos:'sb-intentos'};
@@ -835,19 +836,43 @@ async function boot(){
 boot();
 
 async function doLogin(){
-  const username=$('li-user').value.trim().toLowerCase();
-  const pass=$('li-pass').value;
-  $('login-err').style.display='none';
-  if(!username||!pass){toast('Ingresa usuario y contrase\u00f1a');return;}
-  const btn=$('login-btn');btn.textContent='Ingresando...';btn.disabled=true;
-  const{data,error}=await sb.from('students').select('*').eq('username',username).eq('password',pass).single();
-  btn.textContent='Entrar a estudiar \u2192';btn.disabled=false;
-  if(error||!data){$('login-err').style.display='block';return;}
-  CU={username:data.username,name:data.name};
-  $('app-av').textContent=initials(CU.name);$('app-nn').textContent=CU.name;
-  $('sb-av').textContent=initials(CU.name);$('sb-name').textContent=CU.name;
+  if(_loginBlocked){
+    var blk=document.getElementById('login-block');
+    if(blk){blk.style.display='block';blk.textContent='Acceso bloqueado 10 min por multiples intentos fallidos.';}
+    return;
+  }
+  var username=document.getElementById('li-user').value.trim().toLowerCase();
+  var pass=document.getElementById('li-pass').value;
+  var errEl=document.getElementById('login-err');if(errEl)errEl.style.display='none';
+  if(!username||!pass){toast('Ingresa usuario y contraseña');return;}
+  var btn=document.getElementById('login-btn');if(btn){btn.textContent='Ingresando...';btn.disabled=true;}
+  var res=await sb.from('students').select('*').eq('username',username).eq('password',pass).single();
+  if(btn){btn.textContent='Entrar a estudiar →';btn.disabled=false;}
+  if(res.error||!res.data){
+    _loginAttempts++;
+    if(errEl)errEl.style.display='block';
+    if(_loginAttempts>=5){
+      _loginBlocked=true;
+      var blk=document.getElementById('login-block');
+      if(blk){blk.style.display='block';blk.textContent='Demasiados intentos. Espera 10 minutos.';}
+      _loginBlockTimer=setTimeout(function(){
+        _loginBlocked=false;_loginAttempts=0;
+        var b=document.getElementById('login-block');if(b)b.style.display='none';
+      },600000);
+    }
+    return;
+  }
+  _loginAttempts=0;
+  CU={username:res.data.username,name:res.data.name};
+  var av=initials(CU.name);
+  ['app-av','sb-av'].forEach(function(id){var e=document.getElementById(id);if(e)e.textContent=av;});
+  ['app-nn','sb-name'].forEach(function(id){var e=document.getElementById(id);if(e)e.textContent=CU.name;});
+  startSession();
+  showWelcome(CU.name);
   await refreshDashboard();
-  showScreen('app');showPanel('modulos');
+  showScreen('app');
+  showPanel('modulos');
+  setTimeout(checkNewComments,500);
 }
 async function doAdminLogin(){
   const pass=$('adm-pass').value;
