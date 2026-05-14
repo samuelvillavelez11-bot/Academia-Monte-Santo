@@ -1265,7 +1265,7 @@ async function refreshAdminModules(){
     if(!lvMods.length){const p=document.createElement('p');p.style.cssText='font-size:12px;color:var(--muted);padding:4px 14px 10px';p.textContent='Sin m\u00f3dulos en este nivel a\u00fan.';list.appendChild(p);}
     lvMods.forEach((mod,i)=>{
       const item=document.createElement('div');item.className='a-item';item.style.marginLeft='12px';
-      item.innerHTML='<div style="width:32px;height:32px;border-radius:8px;background:var(--g1);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0">'+(i+1)+'</div>'
+      item.innerHTML='<span class="drag-handle" title="Arrastra para reordenar">⋮⋮</span><div style="width:32px;height:32px;border-radius:8px;background:var(--g1);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0">'+(i+1)+'</div>'
         +'<div style="flex:1"><div class="i-lbl">'+mod.title+'</div><div class="i-sub">'+(mod.lessons||[]).length+' lecci\u00f3n(es) \u00b7 '+(mod.questions||[]).length+' preg.'+(mod.requires_submission?' \u00b7 \uD83D\uDCE4':'')+'</div></div>'
         +'<button class="btn-sm" onclick="editModule(\''+mod.id+'\',\''+mod.title.replace(/'/g,"\\'")+'\')" style="margin-right:6px">\u270F\uFE0F Editar</button>'
         +'<button class="btn-d" onclick="deleteModule(\''+mod.id+'\')">Eliminar</button>';
@@ -1300,9 +1300,49 @@ async function editModule(id,name){
 }
 function closeEditor(){$('mod-editor').classList.remove('open');editingModId=null;}
 function renderEdLessons(lessons){
-  const list=$('ed-lessons');list.innerHTML='';
-  if(!lessons.length){list.innerHTML='<p style="font-size:12px;color:var(--muted)">Sin lecciones a\u00fan.</p>';return;}
-  lessons.forEach((l,li)=>{const item=document.createElement('div');item.className='a-item';item.innerHTML='<div style="flex:1"><div class="i-lbl">'+l.title+'</div><div class="i-sub">'+(l.time||'')+' \u00b7 '+(l.docs||[]).length+' archivo(s) \u00b7 '+(l.media||[]).length+' media</div></div><button class="btn-d" onclick="deleteLesson('+li+')">Eliminar</button>';list.appendChild(item);});
+  var list=$('ed-lessons');list.innerHTML='';
+  if(!lessons.length){list.innerHTML='<p style="font-size:12px;color:var(--muted)">Sin lecciones aun.</p>';return;}
+  lessons.forEach(function(l,li){
+    var item=document.createElement('div');
+    item.className='a-item';
+    item.draggable=true;
+    item.dataset.idx=li;
+    item.innerHTML='<span class="drag-handle" title="Arrastra para reordenar">&#8942;&#8942;</span>'
+      +'<div style="flex:1"><div class="i-lbl">'+l.title+'</div>'
+      +'<div class="i-sub">'+(l.time||'')+' &middot; '+(l.docs||[]).length+' arch. &middot; '+(l.media||[]).length+' media</div></div>'
+      +'<button class="btn-d" onclick="deleteLesson('+li+')">Eliminar</button>';
+    item.addEventListener('dragstart',function(e){
+      _dragSrcIdx=li;
+      item.classList.add('dragging');
+      e.dataTransfer.effectAllowed='move';
+    });
+    item.addEventListener('dragend',function(){
+      item.classList.remove('dragging');
+      list.querySelectorAll('.a-item').forEach(function(i){i.classList.remove('drag-over');});
+    });
+    item.addEventListener('dragover',function(e){
+      e.preventDefault();
+      item.classList.add('drag-over');
+    });
+    item.addEventListener('dragleave',function(){
+      item.classList.remove('drag-over');
+    });
+    item.addEventListener('drop',async function(e){
+      e.preventDefault();
+      item.classList.remove('drag-over');
+      var targetIdx=parseInt(item.dataset.idx);
+      if(_dragSrcIdx===null||_dragSrcIdx===targetIdx){_dragSrcIdx=null;return;}
+      var{data}=await sb.from('modules').select('lessons').eq('id',editingModId).single();
+      var arr=[...(data?.lessons||[])];
+      var moved=arr.splice(_dragSrcIdx,1)[0];
+      arr.splice(targetIdx,0,moved);
+      await sb.from('modules').update({lessons:arr}).eq('id',editingModId);
+      _dragSrcIdx=null;
+      renderEdLessons(arr);
+      toast('Lecciones reordenadas');
+    });
+    list.appendChild(item);
+  });
 }
 function renderEdQuestions(questions){
   const list=$('ed-questions');list.innerHTML='';
